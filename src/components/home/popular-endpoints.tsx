@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 
 import { EndpointCard } from "@/components/endpoint-card";
+import { PageSection } from "@/components/layout/page-section";
 import { AI_ENDPOINTS, POPULAR_ENDPOINTS } from "@/constants/endpoints";
 
 const ICON_MAP: Record<string, LucideIcon> = {
@@ -31,14 +32,11 @@ type PopularEndpointsProps = {
 
 export function PopularEndpoints({ onSelect }: PopularEndpointsProps) {
   return (
-    <section className="space-y-10">
-      <div className="space-y-6">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Popular Endpoints</h2>
-          <p className="mt-2 text-muted-foreground">
-            Quick-start with commonly used mock API keywords.
-          </p>
-        </div>
+    <>
+      <PageSection
+        title="Popular Endpoints"
+        description="Quick-start with commonly used mock API keywords."
+      >
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {POPULAR_ENDPOINTS.map((endpoint) => (
             <EndpointCard
@@ -51,15 +49,12 @@ export function PopularEndpoints({ onSelect }: PopularEndpointsProps) {
             />
           ))}
         </div>
-      </div>
+      </PageSection>
 
-      <div className="space-y-6">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">AI-Powered Endpoints</h2>
-          <p className="mt-2 text-muted-foreground">
-            Try any custom keyword — AI-generated via OpenRouter.
-          </p>
-        </div>
+      <PageSection
+        title="AI-Powered Endpoints"
+        description="Try any custom keyword — AI-generated via OpenRouter."
+      >
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {AI_ENDPOINTS.map((endpoint) => (
             <EndpointCard
@@ -73,7 +68,7 @@ export function PopularEndpoints({ onSelect }: PopularEndpointsProps) {
             />
           ))}
         </div>
-      </div>
-    </section>
+      </PageSection>
+    </>
   );
 }

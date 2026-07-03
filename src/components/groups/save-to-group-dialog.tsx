@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -39,13 +40,17 @@ export function SaveToGroupDialog({
   const [newGroupName, setNewGroupName] = useState("");
   const [creatingNew, setCreatingNew] = useState(false);
 
+  useEffect(() => {
+    if (!open) return;
+
+    const isEmpty = groups.length === 0;
+    setCreatingNew(isEmpty);
+    setSelectedGroupId(isEmpty ? null : (groups[0]?.id ?? null));
+    setLabel("");
+    setNewGroupName("");
+  }, [open, groups]);
+
   function handleOpen(isOpen: boolean) {
-    if (isOpen) {
-      setSelectedGroupId(null);
-      setLabel("");
-      setNewGroupName("");
-      setCreatingNew(groups.length === 0);
-    }
     onOpenChange(isOpen);
   }
 
@@ -55,10 +60,16 @@ export function SaveToGroupDialog({
 
     if (creatingNew) {
       const trimmed = newGroupName.trim();
-      if (!trimmed) return;
+      if (!trimmed) {
+        toast.error("Enter a group name");
+        return;
+      }
       onCreateAndSave(trimmed, endpointLabel);
     } else {
-      if (!selectedGroupId) return;
+      if (!selectedGroupId) {
+        toast.error("Select a group");
+        return;
+      }
       onSave(selectedGroupId, endpointLabel);
     }
     onOpenChange(false);

@@ -7,6 +7,7 @@ import { Features } from "@/components/home/features";
 import { Hero } from "@/components/home/hero";
 import { JsonPreview } from "@/components/home/json-preview";
 import { PopularEndpoints } from "@/components/home/popular-endpoints";
+import { PageSection } from "@/components/layout/page-section";
 import { useApiGenerator } from "@/hooks/use-api-generator";
 
 export function HomePage() {
@@ -23,19 +24,19 @@ export function HomePage() {
   return (
     <>
       <Hero />
-      <div className="mx-auto max-w-6xl space-y-16 px-4 py-16 sm:px-6">
+      <PageSection>
         <div className="grid gap-6 lg:grid-cols-2">
           <ApiGenerator onGenerate={api} />
           <JsonPreview
             url={api.generatedUrl}
-            data={api.response}
+            data={api.filteredResponse}
             loading={api.loading}
             error={api.error}
           />
         </div>
-        <PopularEndpoints onSelect={handleSelectEndpoint} />
-        <Features />
-      </div>
+      </PageSection>
+      <PopularEndpoints onSelect={handleSelectEndpoint} />
+      <Features />
     </>
   );
 }

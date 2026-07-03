@@ -41,4 +41,22 @@ export async function fetchEndpoint(
   }
 }
 
+export type SchemaResponse = {
+  keyword: string;
+  fields: string[];
+  source: "local" | "ai";
+  dynamic?: boolean;
+  discovered?: boolean;
+  message?: string;
+};
+
+export async function fetchSchema(keyword: string): Promise<SchemaResponse> {
+  try {
+    const { data } = await client.get<SchemaResponse>(`/schema/${encodeURIComponent(keyword)}`);
+    return data;
+  } catch (error) {
+    throw new Error(extractErrorMessage(error));
+  }
+}
+
 export { buildApiUrl };
