@@ -5,12 +5,12 @@ import { NAV_LINKS } from "@/constants/navigation";
 
 export function Footer() {
   return (
-    <footer className="mt-auto border-t border-border/60 bg-muted/30">
+    <footer className="mt-auto border-t border-border bg-muted/30">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-3">
         <div className="space-y-3">
-          <div className="flex items-center gap-2 font-semibold">
-            <span className="flex size-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
-              <Zap className="size-3.5" />
+          <div className="flex items-center gap-2 font-heading font-semibold">
+            <span className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <Zap className="size-4" />
             </span>
             Free API
           </div>
@@ -21,7 +21,7 @@ export function Footer() {
         </div>
 
         <div>
-          <h3 className="mb-3 text-sm font-semibold">Navigation</h3>
+          <h3 className="mb-3 font-heading text-sm font-semibold">Navigation</h3>
           <ul className="space-y-2 text-sm text-muted-foreground">
             {NAV_LINKS.map((link) => (
               <li key={link.href}>
@@ -34,7 +34,7 @@ export function Footer() {
         </div>
 
         <div>
-          <h3 className="mb-3 text-sm font-semibold">Resources</h3>
+          <h3 className="mb-3 font-heading text-sm font-semibold">Resources</h3>
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li>
               <Link href="/docs" className="transition-colors hover:text-foreground">
@@ -47,21 +47,15 @@ export function Footer() {
               </Link>
             </li>
             <li>
-              <a
-                href="https://github.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 transition-colors hover:text-foreground"
-              >
-                <ExternalLink className="size-3.5" />
-                GitHub
-              </a>
+              <Link href="/playground" className="transition-colors hover:text-foreground">
+                Playground
+              </Link>
             </li>
           </ul>
         </div>
       </div>
 
-      <div className="border-t border-border/60 py-4 text-center text-xs text-muted-foreground">
+      <div className="border-t border-border py-4 text-center text-xs text-muted-foreground">
         © {new Date().getFullYear()} Free API. Open source mock REST API generator.
       </div>
     </footer>

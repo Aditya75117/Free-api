@@ -10,12 +10,12 @@ type FeatureCardProps = {
 
 export function FeatureCard({ title, description, icon: Icon }: FeatureCardProps) {
   return (
-    <Card>
+    <Card className="transition-shadow hover:shadow-md">
       <CardHeader>
         <div className="flex items-center gap-3">
           {Icon && (
-            <span className="flex size-9 items-center justify-center rounded-lg bg-muted">
-              <Icon className="size-4 text-primary" />
+            <span className="flex size-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <Icon className="size-4" />
             </span>
           )}
           <CardTitle className="text-base">{title}</CardTitle>

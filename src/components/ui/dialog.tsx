@@ -41,7 +41,7 @@ function DialogContent({ className, children, ...props }: React.ComponentProps<"
   return (
     <div
       className={cn(
-        "mx-4 rounded-xl border border-border bg-card p-6 shadow-lg",
+        "relative mx-4 rounded-xl border border-border bg-card p-6 shadow-lg",
         className,
       )}
       {...props}
@@ -52,13 +52,13 @@ function DialogContent({ className, children, ...props }: React.ComponentProps<"
 }
 
 function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
-  return <div className={cn("mb-4 space-y-1.5", className)} {...props} />;
+  return <div className={cn("mb-4 space-y-1.5 pr-8", className)} {...props} />;
 }
 
 function DialogTitle({ className, ...props }: React.ComponentProps<"h2">) {
   return (
     <h2
-      className={cn("text-lg font-semibold leading-none tracking-tight", className)}
+      className={cn("font-heading text-lg font-semibold leading-none tracking-tight", className)}
       {...props}
     />
   );
@@ -74,7 +74,7 @@ function DialogClose({ onClick, className }: { onClick: () => void; className?: 
       type="button"
       onClick={onClick}
       className={cn(
-        "absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100",
+        "absolute top-4 right-4 flex size-8 cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground",
         className,
       )}
       aria-label="Close"

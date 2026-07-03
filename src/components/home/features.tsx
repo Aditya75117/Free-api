@@ -1,5 +1,6 @@
 import {
   Code2,
+  FolderOpen,
   SlidersHorizontal,
   Sparkles,
   Terminal,
@@ -8,6 +9,7 @@ import {
 } from "lucide-react";
 
 import { FeatureCard } from "@/components/feature-card";
+import { PageSection } from "@/components/layout/page-section";
 import { FEATURES } from "@/constants/endpoints";
 
 const ICON_MAP: Record<string, LucideIcon> = {
@@ -16,17 +18,15 @@ const ICON_MAP: Record<string, LucideIcon> = {
   "code-2": Code2,
   sparkles: Sparkles,
   terminal: Terminal,
+  folder: FolderOpen,
 };
 
 export function Features() {
   return (
-    <section className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold tracking-tight">Why Free API?</h2>
-        <p className="mt-2 text-muted-foreground">
-          Everything you need to prototype faster and ship with confidence.
-        </p>
-      </div>
+    <PageSection
+      title="Why Free API?"
+      description="Everything you need to prototype faster and ship with confidence."
+    >
       <div className="grid gap-4 sm:grid-cols-2">
         {FEATURES.map((feature) => (
           <FeatureCard
@@ -37,6 +37,6 @@ export function Features() {
           />
         ))}
       </div>
-    </section>
+    </PageSection>
   );
 }

@@ -94,4 +94,16 @@ export const FEATURES: Feature[] = [
       "Copy URLs, download JSON, and grab code snippets — built for fast prototyping.",
     icon: "terminal",
   },
+  {
+    title: "Response Field Filtering",
+    description:
+      "Filter which fields appear in the JSON preview — copy and download only what you need.",
+    icon: "sliders-horizontal",
+  },
+  {
+    title: "API Groups",
+    description:
+      "Create and manage groups of related endpoints. Save configs, use templates, and export/import as JSON.",
+    icon: "folder",
+  },
 ];

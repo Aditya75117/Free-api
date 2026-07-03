@@ -2,6 +2,8 @@
 
 import type { ReactNode } from "react";
 import dynamic from "next/dynamic";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 import { Download } from "lucide-react";
 import { toast } from "sonner";
 
@@ -9,7 +11,7 @@ import { CopyButton } from "@/components/copy-button";
 import { ErrorCard } from "@/components/error-card";
 import { LoadingSkeleton } from "@/components/loading-skeleton";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
   ssr: false,
@@ -22,10 +24,28 @@ type JsonPreviewProps = {
   loading: boolean;
   error: string | null;
   filterSlot?: ReactNode;
+  filterHint?: string;
+  maxHeight?: number;
+  compact?: boolean;
 };
 
-export function JsonPreview({ url, data, loading, error, filterSlot }: JsonPreviewProps) {
+export function JsonPreview({
+  url,
+  data,
+  loading,
+  error,
+  filterSlot,
+  filterHint,
+  maxHeight = 360,
+  compact = false,
+}: JsonPreviewProps) {
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
   const jsonString = data ? JSON.stringify(data, null, 2) : "";
+  const editorTheme = mounted && resolvedTheme === "dark" ? "vs-dark" : "vs";
+  const hasData = data !== null;
+
+  useEffect(() => setMounted(true), []);
 
   function handleDownload() {
     if (!jsonString) {
@@ -43,34 +63,48 @@ export function JsonPreview({ url, data, loading, error, filterSlot }: JsonPrevi
     toast.success("JSON downloaded");
   }
 
+  const emptyHeight = Math.min(maxHeight, 192);
+
   return (
     <Card>
-      <CardHeader className="flex flex-row items-start justify-between gap-4 space-y-0">
-        <div>
-          <CardTitle>JSON Preview</CardTitle>
-          <CardDescription className="mt-1 break-all">
+      <CardHeader className={compact ? "space-y-3 p-4" : "space-y-4"}>
+        <CardTitle className={compact ? "text-sm" : undefined}>JSON Preview</CardTitle>
+
+        <div className="rounded-lg border border-border bg-muted/40 px-3 py-2.5">
+          <code className="block break-all font-mono text-xs text-muted-foreground">
             {url || "Generate an endpoint to preview the response"}
-          </CardDescription>
+          </code>
         </div>
-        <div className="flex shrink-0 items-center gap-2">
-          {filterSlot}
-          <CopyButton value={url} label="Copy URL" />
-          <CopyButton value={jsonString} label="Copy JSON" />
-          <Button variant="outline" size="sm" onClick={handleDownload} disabled={!jsonString}>
-            <Download className="size-3.5" />
-            Download
-          </Button>
+
+        {filterHint && (
+          <p className="text-xs leading-relaxed text-muted-foreground">{filterHint}</p>
+        )}
+
+        <div
+          className={`flex flex-wrap items-center gap-3 border-t border-border pt-4 ${
+            filterSlot ? "justify-between" : "justify-end"
+          }`}
+        >
+          {filterSlot && <div className="shrink-0">{filterSlot}</div>}
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            <CopyButton value={url} label="Copy URL" />
+            <CopyButton value={jsonString} label="Copy JSON" />
+            <Button variant="outline" size="sm" onClick={handleDownload} disabled={!jsonString}>
+              <Download className="size-3.5" />
+              Download
+            </Button>
+          </div>
         </div>
       </CardHeader>
       <CardContent>
         {loading && <LoadingSkeleton />}
         {error && !loading && <ErrorCard message={error} />}
-        {!loading && !error && data !== null && (
+        {!loading && !error && hasData && (
           <div className="overflow-hidden rounded-lg border border-border">
             <MonacoEditor
-              height="360px"
+              height={`${maxHeight}px`}
               language="json"
-              theme="vs-dark"
+              theme={editorTheme}
               value={jsonString}
               options={{
                 readOnly: true,
@@ -82,8 +116,11 @@ export function JsonPreview({ url, data, loading, error, filterSlot }: JsonPrevi
             />
           </div>
         )}
-        {!loading && !error && data === null && (
-          <div className="flex h-48 items-center justify-center rounded-lg border border-dashed border-border text-sm text-muted-foreground">
+        {!loading && !error && !hasData && (
+          <div
+            className="flex items-center justify-center rounded-lg border border-dashed border-border text-sm text-muted-foreground"
+            style={{ height: `${emptyHeight}px` }}
+          >
             Your JSON response will appear here
           </div>
         )}
