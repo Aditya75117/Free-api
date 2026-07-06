@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 
 export function Navbar() {
   const pathname = usePathname();
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -49,9 +49,9 @@ export function Navbar() {
               variant="ghost"
               size="icon"
               aria-label="Toggle theme"
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
             >
-              {theme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
+              {resolvedTheme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
             </Button>
           )}
 
