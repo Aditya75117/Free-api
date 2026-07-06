@@ -30,7 +30,7 @@ type EndpointCardProps = {
   keyword: string;
   label: string;
   description: string;
-  icon?: string;
+  icon?: LucideIcon;
   aiPowered?: boolean;
   exampleHref?: string;
   playgroundHref?: string;
