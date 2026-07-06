@@ -226,7 +226,7 @@ function PlaygroundInner() {
                     id="endpoint-keyword"
                     placeholder="users"
                     value={api.keyword}
-                    onChange={(e) => api.setKeyword(e.target.value)}
+                    onChange={(e) => api.setKeywordInput(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && api.generate()}
                     className="border-0 shadow-none focus-visible:border-transparent focus-visible:ring-0"
                   />
