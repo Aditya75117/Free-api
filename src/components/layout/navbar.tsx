@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, Moon, Sun, Zap } from "lucide-react";
+import { Menu, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
+import { Logo } from "@/components/brand/logo";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { NAV_LINKS } from "@/constants/navigation";
 import { cn } from "@/lib/utils";
@@ -21,11 +22,8 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <Link href="/" className="flex items-center gap-2 font-heading font-semibold tracking-tight">
-          <span className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
-            <Zap className="size-4" />
-          </span>
-          <span>Free API</span>
+        <Link href="/" aria-label="ApiGenerator home">
+          <Logo size="sm" />
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
