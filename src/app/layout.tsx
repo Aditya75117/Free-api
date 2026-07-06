@@ -1,9 +1,17 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { AppProviders } from "@/components/providers/app-providers";
+import { SiteJsonLd } from "@/components/seo/json-ld";
+import {
+  SITE_DESCRIPTION,
+  SITE_KEYWORDS,
+  SITE_NAME,
+  SITE_URL,
+} from "@/constants/site";
 
 import "./globals.css";
 
@@ -18,13 +26,28 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "Free API — Mock REST API Generator",
-    template: "%s | Free API",
+    default: `${SITE_NAME} — Mock REST API Generator`,
+    template: `%s | ${SITE_NAME}`,
   },
-  description:
-    "Generate mock REST APIs instantly. Preview JSON responses, customize query parameters, and copy endpoints for your projects.",
-  keywords: ["mock api", "rest api", "json", "developer tools", "fake data"],
+  description: SITE_DESCRIPTION,
+  keywords: SITE_KEYWORDS,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: SITE_NAME,
+    title: `${SITE_NAME} — Mock REST API Generator`,
+    description: SITE_DESCRIPTION,
+    url: "/",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE_NAME} — Mock REST API Generator`,
+    description: SITE_DESCRIPTION,
+  },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({
@@ -39,11 +62,13 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col font-sans">
+        <SiteJsonLd />
         <AppProviders>
           <Navbar />
           <main className="flex-1">{children}</main>
           <Footer />
         </AppProviders>
+        <Analytics />
       </body>
     </html>
   );

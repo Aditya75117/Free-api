@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { ExternalLink, Zap } from "lucide-react";
 
+import { Logo } from "@/components/brand/logo";
 import { NAV_LINKS } from "@/constants/navigation";
 
 export function Footer() {
@@ -8,12 +8,7 @@ export function Footer() {
     <footer className="mt-auto border-t border-border bg-muted/30">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-3">
         <div className="space-y-3">
-          <div className="flex items-center gap-2 font-heading font-semibold">
-            <span className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
-              <Zap className="size-4" />
-            </span>
-            Free API
-          </div>
+          <Logo />
           <p className="text-sm text-muted-foreground">
             Generate mock REST APIs instantly. Built for developers who need fast,
             reliable test data.
@@ -56,7 +51,7 @@ export function Footer() {
       </div>
 
       <div className="border-t border-border py-4 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} Free API. Open source mock REST API generator.
+        © {new Date().getFullYear()} ApiGenerator. Open source mock REST API generator.
       </div>
     </footer>
   );

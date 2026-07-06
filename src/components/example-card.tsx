@@ -1,27 +1,7 @@
-"use client";
-
-import {
-  BookOpen,
-  FileText,
-  Film,
-  MessageSquare,
-  ShoppingBag,
-  Users,
-  type LucideIcon,
-} from "lucide-react";
 import Link from "next/link";
 
 import { EndpointCard } from "@/components/endpoint-card";
 import { POPULAR_ENDPOINTS } from "@/constants/endpoints";
-
-const ICON_MAP: Record<string, LucideIcon> = {
-  users: Users,
-  "file-text": FileText,
-  "shopping-bag": ShoppingBag,
-  "book-open": BookOpen,
-  film: Film,
-  "message-square": MessageSquare,
-};
 
 export function ExampleCardGrid() {
   return (
@@ -32,8 +12,9 @@ export function ExampleCardGrid() {
           keyword={endpoint.keyword}
           label={endpoint.label}
           description={endpoint.description}
-          icon={ICON_MAP[endpoint.icon]}
-          onSelect={() => {}}
+          icon={endpoint.icon}
+          exampleHref={`/examples/${endpoint.keyword}`}
+          playgroundHref={`/playground?keyword=${endpoint.keyword}`}
         />
       ))}
     </div>

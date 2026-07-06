@@ -24,7 +24,7 @@ const ICON_MAP: Record<string, LucideIcon> = {
 export function Features() {
   return (
     <PageSection
-      title="Why Free API?"
+      title="Why ApiGenerator?"
       description="Everything you need to prototype faster and ship with confidence."
     >
       <div className="grid gap-4 sm:grid-cols-2">

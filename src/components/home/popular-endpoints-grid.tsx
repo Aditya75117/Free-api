@@ -2,7 +2,7 @@ import { EndpointCard } from "@/components/endpoint-card";
 import { PageSection } from "@/components/layout/page-section";
 import { AI_ENDPOINTS, POPULAR_ENDPOINTS } from "@/constants/endpoints";
 
-export function ExamplesGrid() {
+export function PopularEndpointsGrid() {
   return (
     <>
       <PageSection
@@ -26,7 +26,7 @@ export function ExamplesGrid() {
 
       <PageSection
         title="AI-Powered Endpoints"
-        description="Try custom keywords — AI-generated mock data via OpenRouter."
+        description="Try any custom keyword — AI-generated via OpenRouter."
       >
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {AI_ENDPOINTS.map((endpoint) => (

@@ -9,12 +9,16 @@ import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ABOUT_TOC_ITEMS } from "@/constants/about-sections";
 import { FEATURES } from "@/constants/endpoints";
+import { buildPageMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "About",
-  description: "Learn about Free API — motivation, features, and roadmap.",
-};
+  description:
+    "Learn about ApiGenerator — an open source mock REST API tool for developer prototyping, testing, and fast frontend iteration.",
+  path: "/about",
+  keywords: ["open source mock api", "developer prototyping tool", "api generator"],
+});
 
 const ROADMAP = [
   { phase: "Phase 1", title: "Project Setup", items: ["Tailwind", "Shadcn", "Routing"], done: true },
@@ -30,7 +34,7 @@ const ROADMAP = [
     items: ["Advanced params", "Saved endpoints", "API groups", "Group templates", "Export"],
     done: true,
   },
-  { phase: "Phase 4", title: "Polish", items: ["SEO", "Analytics", "PWA", "Request history"], done: false },
+  { phase: "Phase 4", title: "Polish", items: ["SEO", "Analytics", "PWA", "Request history"], done: true },
 ];
 
 export default function AboutPage() {
@@ -38,7 +42,7 @@ export default function AboutPage() {
     <div className="border-b border-border">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:py-16">
         <PageHeader
-          title="About Free API"
+          title="About ApiGenerator"
           description="A developer tool for generating mock REST APIs on demand."
           className="mb-10"
         />
@@ -59,7 +63,7 @@ export default function AboutPage() {
                 </CardHeader>
                 <CardContent className="leading-relaxed text-muted-foreground">
                   Building frontend apps often means waiting on backend endpoints or setting up
-                  complex mock servers. Free API removes that friction — enter a keyword, get
+                  complex mock servers. ApiGenerator removes that friction — enter a keyword, get
                   realistic JSON, and keep shipping. It&apos;s designed for prototyping, testing,
                   tutorials, and hackathons.
                 </CardContent>
