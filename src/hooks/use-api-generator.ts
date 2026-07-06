@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 import { API_BASE_URL } from "@/constants/api";
 import { DEFAULT_QUERY_PARAMS } from "@/constants/api";
+import { getPredefinedFields } from "@/constants/field-schemas";
 import { fetchEndpoint, fetchSchema } from "@/services/api";
 import { buildApiUrl } from "@/utils/url";
 import {
@@ -23,15 +24,29 @@ function mergeFieldLists(existing: string[], incoming: string[]): string[] {
   return Array.from(new Set([...existing, ...incoming])).sort();
 }
 
+function resolveInitialFieldState(initialKeyword: string) {
+  const trimmed = initialKeyword.trim();
+  const predefined = trimmed ? getPredefinedFields(trimmed) : null;
+  return {
+    availableFields: predefined ?? [],
+    selectedFields: predefined ?? [],
+    schemaSource: predefined ? ("local" as const) : null,
+  };
+}
+
 export function useApiGenerator(initialKeyword = "") {
-  const [keyword, setKeyword] = useState(initialKeyword);
+  const initialFields = resolveInitialFieldState(initialKeyword);
+
+  const [keyword, setKeywordState] = useState(initialKeyword);
   const [queryParameters, setQueryParameters] =
     useState<QueryParameter[]>(defaultParams);
   const [generatedUrl, setGeneratedUrl] = useState("");
 
-  const [selectedFields, setSelectedFields] = useState<string[]>([]);
-  const [availableFields, setAvailableFields] = useState<string[]>([]);
-  const [schemaSource, setSchemaSource] = useState<"local" | "ai" | null>(null);
+  const [selectedFields, setSelectedFields] = useState<string[]>(initialFields.selectedFields);
+  const [availableFields, setAvailableFields] = useState<string[]>(initialFields.availableFields);
+  const [schemaSource, setSchemaSource] = useState<"local" | "ai" | null>(
+    initialFields.schemaSource,
+  );
   const [schemaLoading, setSchemaLoading] = useState(false);
   const [aiFieldsDiscovered, setAiFieldsDiscovered] = useState(false);
 
@@ -41,58 +56,6 @@ export function useApiGenerator(initialKeyword = "") {
 
   selectedFieldsRef.current = selectedFields;
   availableFieldsRef.current = availableFields;
-
-  // Fetch schema when keyword changes (debounced)
-  useEffect(() => {
-    const trimmed = keyword.trim();
-    if (!trimmed) {
-      setAvailableFields([]);
-      setSelectedFields([]);
-      setSchemaSource(null);
-      setAiFieldsDiscovered(false);
-      setSchemaLoading(false);
-      return;
-    }
-
-    setSchemaLoading(true);
-    setAiFieldsDiscovered(false);
-
-    const timeout = setTimeout(async () => {
-      schemaAbortRef.current?.abort();
-      const controller = new AbortController();
-      schemaAbortRef.current = controller;
-
-      setSchemaLoading(true);
-      try {
-        const schema = await fetchSchema(trimmed);
-        if (controller.signal.aborted) return;
-        setSchemaSource(schema.source);
-        if (schema.source === "local" && schema.fields.length > 0) {
-          setAvailableFields(schema.fields);
-          setSelectedFields(schema.fields);
-        } else if (schema.source === "ai" && schema.discovered && schema.fields.length > 0) {
-          setAvailableFields(schema.fields);
-          setSelectedFields(schema.fields);
-          setAiFieldsDiscovered(true);
-        } else {
-          setAvailableFields([]);
-          setSelectedFields([]);
-        }
-      } catch {
-        if (controller.signal.aborted) return;
-        setSchemaSource(null);
-        setAvailableFields([]);
-        setSelectedFields([]);
-      } finally {
-        if (!controller.signal.aborted) setSchemaLoading(false);
-      }
-    }, 300);
-
-    return () => {
-      clearTimeout(timeout);
-      schemaAbortRef.current?.abort();
-    };
-  }, [keyword]);
 
   const buildFinalParams = useCallback((): QueryParameter[] => {
     const params = [...queryParameters];
@@ -129,17 +92,17 @@ export function useApiGenerator(initialKeyword = "") {
         currentAvailable.length > 0 &&
         currentSelected.length < currentAvailable.length;
 
-      if (isAiResponse(data) && !fieldsWereFiltered) {
-        const keys = extractAvailableFields(data);
-        if (keys.length > 0) {
-          if (currentAvailable.length === 0) {
-            setAvailableFields(keys);
-            setSelectedFields(keys);
+      const keys = extractAvailableFields(data);
+      if (keys.length > 0 && !fieldsWereFiltered) {
+        if (currentAvailable.length === 0) {
+          setAvailableFields(keys);
+          setSelectedFields(keys);
+          if (isAiResponse(data)) {
             setAiFieldsDiscovered(true);
-          } else {
-            setAvailableFields((prev) => mergeFieldLists(prev, keys));
-            setSelectedFields((prev) => mergeFieldLists(prev, keys));
           }
+        } else {
+          setAvailableFields((prev) => mergeFieldLists(prev, keys));
+          setSelectedFields((prev) => mergeFieldLists(prev, keys));
         }
       }
 
@@ -149,6 +112,95 @@ export function useApiGenerator(initialKeyword = "") {
       toast.error(error.message || "Failed to fetch endpoint");
     },
   });
+
+  const resetMutation = mutation.reset;
+
+  const applyKeywordChange = useCallback(
+    (newKeyword: string) => {
+      const trimmed = newKeyword.trim();
+      const predefined = trimmed ? getPredefinedFields(trimmed) : null;
+
+      resetMutation();
+      setKeywordState(newKeyword);
+      setGeneratedUrl("");
+      setAiFieldsDiscovered(false);
+
+      if (predefined) {
+        setSchemaSource("local");
+        setAvailableFields(predefined);
+        setSelectedFields(predefined);
+        setSchemaLoading(false);
+      } else {
+        setSchemaSource(null);
+        setAvailableFields([]);
+        setSelectedFields([]);
+      }
+    },
+    [resetMutation],
+  );
+
+  const setKeywordInput = useCallback((newKeyword: string) => {
+    const trimmed = newKeyword.trim();
+    const predefined = trimmed ? getPredefinedFields(trimmed) : null;
+
+    setKeywordState(newKeyword);
+
+    if (predefined) {
+      setSchemaSource("local");
+      setAvailableFields(predefined);
+      setSelectedFields(predefined);
+      setSchemaLoading(false);
+    } else {
+      setSchemaSource(null);
+      setAvailableFields([]);
+      setSelectedFields([]);
+    }
+  }, []);
+
+  // Fetch schema for non-predefined keywords (AI / custom) — debounced
+  useEffect(() => {
+    const trimmed = keyword.trim();
+    if (!trimmed || getPredefinedFields(trimmed)) {
+      return;
+    }
+
+    setSchemaLoading(true);
+
+    const timeout = setTimeout(async () => {
+      schemaAbortRef.current?.abort();
+      const controller = new AbortController();
+      schemaAbortRef.current = controller;
+
+      try {
+        const schema = await fetchSchema(trimmed);
+        if (controller.signal.aborted) return;
+        setSchemaSource(schema.source);
+        if (schema.source === "local" && schema.fields.length > 0) {
+          setAvailableFields(schema.fields);
+          setSelectedFields(schema.fields);
+        } else if (schema.source === "ai" && schema.discovered && schema.fields.length > 0) {
+          setAvailableFields(schema.fields);
+          setSelectedFields(schema.fields);
+          setAiFieldsDiscovered(true);
+        } else {
+          setAvailableFields([]);
+          setSelectedFields([]);
+        }
+      } catch {
+        if (controller.signal.aborted) return;
+        setSchemaSource(null);
+        setAvailableFields([]);
+        setSelectedFields([]);
+      } finally {
+        if (!controller.signal.aborted) setSchemaLoading(false);
+      }
+    }, 300);
+
+    return () => {
+      clearTimeout(timeout);
+      schemaAbortRef.current?.abort();
+    };
+  }, [keyword]);
 
   const rawResponse = mutation.data ?? null;
 
@@ -197,15 +249,13 @@ export function useApiGenerator(initialKeyword = "") {
     setQueryParameters((prev) => prev.filter((_, i) => i !== index));
   }, []);
 
-  const loadConfig = useCallback((newKeyword: string, params: QueryParameter[]) => {
-    setKeyword(newKeyword);
-    setQueryParameters(params.length > 0 ? params : [...defaultParams]);
-    setGeneratedUrl("");
-    setAvailableFields([]);
-    setSelectedFields([]);
-    setAiFieldsDiscovered(false);
-    mutation.reset();
-  }, [mutation]);
+  const loadConfig = useCallback(
+    (newKeyword: string, params: QueryParameter[]) => {
+      setQueryParameters(params.length > 0 ? params : [...defaultParams]);
+      applyKeywordChange(newKeyword);
+    },
+    [applyKeywordChange],
+  );
 
   const hasResponse = rawResponse !== null;
   const isPreviewFiltered =
@@ -216,7 +266,8 @@ export function useApiGenerator(initialKeyword = "") {
 
   return {
     keyword,
-    setKeyword,
+    setKeyword: applyKeywordChange,
+    setKeywordInput,
     generatedUrl: currentUrl,
     response: rawResponse,
     filteredResponse,

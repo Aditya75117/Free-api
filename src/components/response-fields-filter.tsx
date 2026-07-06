@@ -116,9 +116,6 @@ export function ResponseFieldsFilter({
   }
 
   if (variant === "panel") {
-    const showPanel = loading || aiFieldsPending || availableFields.length > 0;
-    if (!showPanel) return null;
-
     return (
       <div className="space-y-3">
         <div className="flex items-center justify-between gap-2">
@@ -155,7 +152,7 @@ export function ResponseFieldsFilter({
             <p className="text-left text-xs leading-relaxed text-muted-foreground">
               AI keywords have dynamic fields — generate once to discover available fields.
             </p>
-          ) : (
+          ) : availableFields.length > 0 ? (
             <>
               <div className="min-h-0 flex-1 overflow-y-auto">
                 <div className="flex flex-wrap gap-1.5">
@@ -195,6 +192,10 @@ export function ResponseFieldsFilter({
                 )}
               </p>
             </>
+          ) : (
+            <p className="text-left text-xs leading-relaxed text-muted-foreground">
+              Generate once to load available fields for this keyword.
+            </p>
           )}
         </div>
       </div>
