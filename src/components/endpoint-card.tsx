@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import {
   BookOpen,
@@ -30,8 +32,9 @@ type EndpointCardProps = {
   keyword: string;
   label: string;
   description: string;
-  icon?: LucideIcon;
+  icon?: string | LucideIcon;
   aiPowered?: boolean;
+  onSelect?: (keyword: string) => void;
   exampleHref?: string;
   playgroundHref?: string;
 };
@@ -42,13 +45,22 @@ export function EndpointCard({
   description,
   icon,
   aiPowered,
+  onSelect,
   exampleHref,
   playgroundHref,
 }: EndpointCardProps) {
-  const Icon = icon ? ICON_MAP[icon] : undefined;
+  // icon can be either a key into ICON_MAP (string) or a LucideIcon component
+  const Icon = icon
+    ? typeof icon === "string"
+      ? ICON_MAP[icon]
+      : icon
+    : undefined;
 
   return (
-    <Card className="group flex h-full flex-col transition-shadow hover:shadow-md">
+    <Card
+      className="group flex h-full flex-col transition-shadow hover:shadow-md"
+      onClick={() => onSelect?.(keyword)}
+    >
       <CardHeader className="flex flex-1 flex-col gap-0">
         <div className="flex items-center gap-3">
           {Icon && (
