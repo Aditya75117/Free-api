@@ -8,5 +8,5 @@ export const API_BASE_URL =
     : LOCAL_API_BASE_URL);
 
 export const DEFAULT_QUERY_PARAMS = {
-  count: "",
+  count: "10",
 } as const;

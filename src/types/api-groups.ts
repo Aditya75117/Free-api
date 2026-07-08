@@ -5,6 +5,8 @@ export type SavedEndpoint = {
   keyword: string;
   label?: string;
   queryParameters: QueryParameter[];
+  /** When set, the saved endpoint targets GET /:keyword/:itemId */
+  itemId?: string;
 };
 
 export type ApiGroup = {

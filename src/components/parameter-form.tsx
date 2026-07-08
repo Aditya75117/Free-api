@@ -18,6 +18,7 @@ import type { QueryParameter } from "@/types/api";
 type ParameterFormProps = {
   parameters: QueryParameter[];
   onUpdate: (index: number, field: "key" | "value", value: string) => void;
+  onSetKey: (index: number, key: string) => void;
   onAdd: () => void;
   onRemove: (index: number) => void;
 };
@@ -33,6 +34,7 @@ function ParamKeyField({
   isCustom,
   onSelectCustom,
   onSelectKnown,
+  onSetKey,
   onUpdate,
 }: {
   param: QueryParameter;
@@ -40,6 +42,7 @@ function ParamKeyField({
   isCustom: boolean;
   onSelectCustom: () => void;
   onSelectKnown: () => void;
+  onSetKey: (index: number, key: string) => void;
   onUpdate: (index: number, field: "key" | "value", value: string) => void;
 }) {
   const selectValue = isCustom ? CUSTOM_PARAM_KEY : param.key;
@@ -53,8 +56,7 @@ function ParamKeyField({
     }
 
     onSelectKnown();
-    onUpdate(index, "key", value);
-    onUpdate(index, "value", "");
+    onSetKey(index, value);
   }
 
   if (isCustom) {
@@ -148,6 +150,7 @@ function ParamValueField({
 export function ParameterForm({
   parameters,
   onUpdate,
+  onSetKey,
   onAdd,
   onRemove,
 }: ParameterFormProps) {
@@ -205,6 +208,7 @@ export function ParameterForm({
                     return next;
                   })
                 }
+                onSetKey={onSetKey}
                 onUpdate={onUpdate}
               />
             </div>

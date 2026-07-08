@@ -69,7 +69,9 @@ export const QUERY_PARAM_DOCS: QueryParamDoc[] = [
   {
     name: "seed",
     type: "string",
-    description: "Seed for repeatable mock data across requests.",
+    description:
+      "Seed for repeatable mock data across requests. When omitted, the server uses a default seed so list→detail chaining works without extra setup.",
+    default: "default",
     example: "my-test-seed",
     valueHint: "any string",
     optional: true,
@@ -101,7 +103,7 @@ export function getQueryParamDoc(name: string): QueryParamDoc | undefined {
 
 export function getQueryParamDefaultValue(name: string): string {
   const doc = getQueryParamDoc(name);
-  return doc?.default ?? doc?.example ?? "";
+  return doc?.default ?? "";
 }
 
 export function isKnownQueryParam(name: string): boolean {

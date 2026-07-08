@@ -16,7 +16,7 @@ type GroupCardProps = {
   group: ApiGroup;
   onEdit: (group: ApiGroup) => void;
   onDelete: (id: string) => void;
-  onOpenInPlayground: (keyword: string, params: QueryParameter[]) => void;
+  onOpenInPlayground: (keyword: string, params: QueryParameter[], itemId?: string) => void;
   onRemoveEndpoint: (groupId: string, endpointId: string) => void;
   onExport: (group: ApiGroup) => void;
 };
@@ -123,10 +123,11 @@ export function GroupCard({
                   keyword={ep.keyword}
                   label={ep.label}
                   initialParams={ep.queryParameters}
+                  itemId={ep.itemId}
                   defaultExpanded={group.endpoints.length === 1}
                   onRemove={() => onRemoveEndpoint(group.id, ep.id)}
                   onOpenInPlayground={() =>
-                    onOpenInPlayground(ep.keyword, ep.queryParameters)
+                    onOpenInPlayground(ep.keyword, ep.queryParameters, ep.itemId)
                   }
                 />
               ))}

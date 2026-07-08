@@ -93,12 +93,17 @@ export function GroupsContent() {
     toast.success(`Template "${template.name}" added`);
   }
 
-  function handleOpenInPlayground(keyword: string, params: { key: string; value: string }[]) {
+  function handleOpenInPlayground(
+    keyword: string,
+    params: { key: string; value: string }[],
+    itemId?: string,
+  ) {
     const searchParams = new URLSearchParams();
     searchParams.set("keyword", keyword);
     for (const p of params) {
       if (p.key && p.value) searchParams.set(p.key, p.value);
     }
+    if (itemId) searchParams.set("itemId", itemId);
     router.push(`/playground?${searchParams.toString()}`);
   }
 

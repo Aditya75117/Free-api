@@ -53,6 +53,7 @@ export function ApiGenerator({ onGenerate }: ApiGeneratorProps) {
         <ParameterForm
           parameters={api.queryParameters}
           onUpdate={api.updateQueryParam}
+          onSetKey={api.setQueryParamKey}
           onAdd={api.addQueryParam}
           onRemove={api.removeQueryParam}
         />

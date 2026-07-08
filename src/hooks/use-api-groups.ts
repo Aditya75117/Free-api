@@ -25,6 +25,50 @@ export function useApiGroups() {
     reload();
   }, [reload]);
 
+  const createGroupWithEndpoints = useCallback(
+    async (
+      name: string,
+      endpoints: Omit<SavedEndpoint, "id">[],
+      options?: { silent?: boolean },
+    ): Promise<ApiGroup | null> => {
+      const trimmed = name.trim() || "Untitled";
+      if (trimmed.length > MAX_GROUP_NAME_LENGTH) {
+        if (!options?.silent) {
+          toast.error(`Group name must be 1–${MAX_GROUP_NAME_LENGTH} characters`);
+        }
+        return null;
+      }
+      if (groups.length >= MAX_GROUPS) {
+        if (!options?.silent) {
+          toast.error(`Maximum ${MAX_GROUPS} groups allowed`);
+        }
+        return null;
+      }
+      if (endpoints.length > MAX_ENDPOINTS_PER_GROUP) {
+        if (!options?.silent) {
+          toast.error(`Maximum ${MAX_ENDPOINTS_PER_GROUP} endpoints per group`);
+        }
+        return null;
+      }
+
+      const group: ApiGroup = {
+        id: generateId(),
+        name: trimmed,
+        endpoints: endpoints.map((endpoint) => ({ ...endpoint, id: generateId() })),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+
+      await localGroupStorage.saveGroup(group);
+      await reload();
+      if (!options?.silent) {
+        toast.success(`Group "${trimmed}" created`);
+      }
+      return group;
+    },
+    [groups.length, reload],
+  );
+
   const createGroup = useCallback(
     async (name: string, description?: string): Promise<ApiGroup | null> => {
       const trimmed = name.trim();
@@ -76,6 +120,36 @@ export function useApiGroups() {
       await localGroupStorage.deleteGroup(id);
       await reload();
       toast.success("Group deleted");
+    },
+    [reload],
+  );
+
+  const addEndpointsToGroup = useCallback(
+    async (groupId: string, endpoints: Omit<SavedEndpoint, "id">[]) => {
+      if (endpoints.length === 0) return;
+
+      const allGroups = await localGroupStorage.getGroups();
+      const group = allGroups.find((g) => g.id === groupId);
+      if (!group) {
+        toast.error("Group not found");
+        return;
+      }
+
+      if (group.endpoints.length + endpoints.length > MAX_ENDPOINTS_PER_GROUP) {
+        toast.error(`Maximum ${MAX_ENDPOINTS_PER_GROUP} endpoints per group`);
+        return;
+      }
+
+      const newEndpoints: SavedEndpoint[] = endpoints.map((endpoint) => ({
+        ...endpoint,
+        id: generateId(),
+      }));
+
+      await localGroupStorage.updateGroup(groupId, {
+        endpoints: [...group.endpoints, ...newEndpoints],
+      });
+      await reload();
+      toast.success(`Saved ${endpoints.length} endpoints to "${group.name}"`);
     },
     [reload],
   );
@@ -142,9 +216,11 @@ export function useApiGroups() {
     groups,
     isLoading,
     createGroup,
+    createGroupWithEndpoints,
     updateGroup,
     deleteGroup,
     addEndpointToGroup,
+    addEndpointsToGroup,
     removeEndpointFromGroup,
     updateEndpointInGroup,
     getGroup,

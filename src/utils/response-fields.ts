@@ -1,21 +1,7 @@
 /**
- * Extracts available field names from an API response.
- * Prefers the backend `fields` metadata when present, otherwise derives from data items.
+ * Extracts available field names from an API response by deriving keys from data items.
  */
 export function extractAvailableFields(response: unknown): string[] {
-  if (!response || typeof response !== "object") return [];
-
-  const res = response as Record<string, unknown>;
-  const metaFields = res.fields;
-
-  if (
-    Array.isArray(metaFields) &&
-    metaFields.length > 0 &&
-    metaFields.every((field) => typeof field === "string")
-  ) {
-    return [...metaFields].sort();
-  }
-
   return extractDataKeys(response);
 }
 
@@ -27,6 +13,14 @@ export function extractDataKeys(response: unknown): string[] {
 
   const res = response as Record<string, unknown>;
   const data = res.data;
+
+  if (data && typeof data === "object" && !Array.isArray(data)) {
+    const keySet = new Set<string>();
+    for (const key of Object.keys(data as Record<string, unknown>)) {
+      keySet.add(key);
+    }
+    return Array.from(keySet).sort();
+  }
 
   if (!Array.isArray(data) || data.length === 0) return [];
 
@@ -63,6 +57,17 @@ export function filterResponseByFields(
   const res = response as Record<string, unknown>;
   const data = res.data;
 
+  if (data && typeof data === "object" && !Array.isArray(data)) {
+    const fieldSet = new Set(selectedFields);
+    const filtered: Record<string, unknown> = {};
+    for (const key of Object.keys(data as Record<string, unknown>)) {
+      if (fieldSet.has(key)) {
+        filtered[key] = (data as Record<string, unknown>)[key];
+      }
+    }
+    return { ...res, data: filtered };
+  }
+
   if (!Array.isArray(data) || data.length === 0) return response;
 
   const fieldSet = new Set(selectedFields);
@@ -79,4 +84,35 @@ export function filterResponseByFields(
   });
 
   return { ...res, data: filteredData };
+}
+
+/** True when the response `data` is a non-empty array (list endpoint). */
+export function isListResponse(response: unknown): boolean {
+  if (!response || typeof response !== "object") return false;
+  const data = (response as Record<string, unknown>).data;
+  return Array.isArray(data) && data.length > 0;
+}
+
+/** True when the response `data` is a single object (detail endpoint). */
+export function isDetailResponse(response: unknown): boolean {
+  if (!response || typeof response !== "object") return false;
+  const data = (response as Record<string, unknown>).data;
+  return Boolean(data && typeof data === "object" && !Array.isArray(data));
+}
+
+/** Extracts `id` values from a list response's `data` array (for list→detail UX). */
+export function extractListItemIds(response: unknown, limit = 10): string[] {
+  if (!response || typeof response !== "object") return [];
+
+  const data = (response as Record<string, unknown>).data;
+  if (!Array.isArray(data)) return [];
+
+  return data
+    .map((item) => {
+      if (!item || typeof item !== "object" || Array.isArray(item)) return null;
+      const id = (item as Record<string, unknown>).id;
+      return id != null ? String(id) : null;
+    })
+    .filter((id): id is string => Boolean(id))
+    .slice(0, limit);
 }

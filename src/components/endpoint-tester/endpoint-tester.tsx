@@ -29,6 +29,7 @@ type EndpointTesterProps = {
   keyword: string;
   label?: string;
   initialParams: QueryParameter[];
+  itemId?: string;
   autoFetch?: boolean;
   compact?: boolean;
   defaultExpanded?: boolean;
@@ -42,6 +43,7 @@ export const EndpointTester = forwardRef<EndpointTesterHandle, EndpointTesterPro
       keyword,
       label,
       initialParams,
+      itemId,
       autoFetch = true,
       compact = true,
       defaultExpanded = false,
@@ -63,24 +65,28 @@ export const EndpointTester = forwardRef<EndpointTesterHandle, EndpointTesterPro
     useEffect(() => {
       if (configLoaded.current) return;
       configLoaded.current = true;
-      api.loadConfig(keyword, initialParams);
-    }, [keyword, initialParams, api]);
+      api.loadConfig(keyword, initialParams, itemId);
+    }, [keyword, initialParams, itemId, api]);
 
     useEffect(() => {
       if (!expanded || !autoFetch || didAutoFetch.current) return;
       if (api.keyword.trim() !== keyword.trim()) return;
       didAutoFetch.current = true;
-      void api.generateAsync();
-    }, [expanded, autoFetch, api, api.keyword, keyword]);
+      if (itemId) {
+        void api.generateDetailAsync();
+      } else {
+        void api.generateAsync();
+      }
+    }, [expanded, autoFetch, api, api.keyword, keyword, itemId]);
 
     useImperativeHandle(
       ref,
       () => ({
-        generate: api.generate,
-        generateAsync: api.generateAsync,
+        generate: itemId ? api.generateDetail : api.generate,
+        generateAsync: itemId ? api.generateDetailAsync : api.generateAsync,
         loading: api.loading,
       }),
-      [api.generate, api.generateAsync, api.loading],
+      [api.generate, api.generateAsync, api.generateDetail, api.generateDetailAsync, api.loading, itemId],
     );
 
     const previewMaxHeight = compact ? 200 : 360;
@@ -105,7 +111,10 @@ export const EndpointTester = forwardRef<EndpointTesterHandle, EndpointTesterPro
             )}
             <div className="min-w-0">
               <div className="flex items-center gap-1.5">
-                <code className="text-xs font-medium leading-none">/{keyword}</code>
+                <code className="text-xs font-medium leading-none">
+                  /{keyword}
+                  {itemId ? `/${itemId.slice(0, 8)}…` : ""}
+                </code>
                 {label && (
                   <span className="text-[11px] text-muted-foreground">({label})</span>
                 )}
@@ -156,11 +165,12 @@ export const EndpointTester = forwardRef<EndpointTesterHandle, EndpointTesterPro
           <ParameterForm
             parameters={api.queryParameters}
             onUpdate={api.updateQueryParam}
+            onSetKey={api.setQueryParamKey}
             onAdd={api.addQueryParam}
             onRemove={api.removeQueryParam}
           />
 
-          {api.keyword.trim() && !api.hasResponse && (
+          {api.keyword.trim() && (
             <ResponseFieldsFilter
               variant="panel"
               loading={api.schemaLoading}
@@ -178,8 +188,8 @@ export const EndpointTester = forwardRef<EndpointTesterHandle, EndpointTesterPro
 
           <div className="flex flex-col gap-3 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-end">
             <Button
-              onClick={api.generate}
-              disabled={api.loading || !api.keyword.trim()}
+              onClick={itemId ? api.generateDetail : api.generate}
+              disabled={api.loading || !api.keyword.trim() || (Boolean(itemId) && !api.itemId.trim())}
               size="sm"
               className="min-w-[100px]"
             >
@@ -208,15 +218,6 @@ export const EndpointTester = forwardRef<EndpointTesterHandle, EndpointTesterPro
               api.hasResponse && api.availableFields.length > 0
                 ? "Preview updates instantly as you select fields — no need to regenerate"
                 : undefined
-            }
-            filterSlot={
-              api.hasResponse && api.availableFields.length > 0 ? (
-                <ResponseFieldsFilter
-                  availableFields={api.availableFields}
-                  selectedFields={api.selectedFields}
-                  onSelectionChange={api.setSelectedFields}
-                />
-              ) : undefined
             }
           />
           </CardContent>
