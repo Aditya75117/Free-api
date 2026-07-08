@@ -1,7 +1,7 @@
 import axios, { isAxiosError } from "axios";
 
 import { API_BASE_URL } from "@/constants/api";
-import { buildApiUrl } from "@/utils/url";
+import { activeQueryParameters, buildApiUrl, normalizeKeyword } from "@/utils/url";
 import type { QueryParameter } from "@/types/api";
 
 const client = axios.create({
@@ -31,10 +31,26 @@ function extractErrorMessage(error: unknown): string {
 export async function fetchEndpoint(
   keyword: string,
   queryParameters: QueryParameter[] = [],
+  itemId?: string,
 ): Promise<unknown> {
   try {
-    const url = buildApiUrl(API_BASE_URL, keyword, queryParameters);
-    const { data } = await client.get(url.replace(API_BASE_URL, ""));
+    const trimmed = normalizeKeyword(keyword);
+    if (!trimmed) {
+      throw new Error("Enter a keyword to generate an endpoint");
+    }
+
+    const params = Object.fromEntries(
+      activeQueryParameters(queryParameters).map(({ key, value }) => [
+        key.trim(),
+        value.trim(),
+      ]),
+    );
+
+    const path = itemId?.trim()
+      ? `/${trimmed}/${encodeURIComponent(itemId.trim())}`
+      : `/${trimmed}`;
+
+    const { data } = await client.get(path, { params });
     return data;
   } catch (error) {
     throw new Error(extractErrorMessage(error));

@@ -7,10 +7,12 @@ import { toast } from "sonner";
 import { API_BASE_URL } from "@/constants/api";
 import { DEFAULT_QUERY_PARAMS } from "@/constants/api";
 import { getPredefinedFields } from "@/constants/field-schemas";
+import { getQueryParamDefaultValue } from "@/constants/query-params";
 import { fetchEndpoint, fetchSchema } from "@/services/api";
-import { buildApiUrl } from "@/utils/url";
+import { activeQueryParameters, buildApiUrl } from "@/utils/url";
 import {
   extractAvailableFields,
+  extractListItemIds,
   filterResponseByFields,
   isAiResponse,
 } from "@/utils/response-fields";
@@ -19,6 +21,12 @@ import type { QueryParameter } from "@/types/api";
 const defaultParams: QueryParameter[] = Object.entries(DEFAULT_QUERY_PARAMS).map(
   ([key, value]) => ({ key, value }),
 );
+
+type GenerateVariables = {
+  keyword: string;
+  params: QueryParameter[];
+  itemId?: string;
+};
 
 function mergeFieldLists(existing: string[], incoming: string[]): string[] {
   return Array.from(new Set([...existing, ...incoming])).sort();
@@ -38,6 +46,7 @@ export function useApiGenerator(initialKeyword = "") {
   const initialFields = resolveInitialFieldState(initialKeyword);
 
   const [keyword, setKeywordState] = useState(initialKeyword);
+  const [itemId, setItemId] = useState("");
   const [queryParameters, setQueryParameters] =
     useState<QueryParameter[]>(defaultParams);
   const [generatedUrl, setGeneratedUrl] = useState("");
@@ -58,8 +67,7 @@ export function useApiGenerator(initialKeyword = "") {
   availableFieldsRef.current = availableFields;
 
   const buildFinalParams = useCallback((): QueryParameter[] => {
-    const params = [...queryParameters];
-    const filtered = params.filter((p) => p.key !== "fields");
+    const params = queryParameters.filter((p) => p.key !== "fields");
     const currentSelected = selectedFieldsRef.current;
     const currentAvailable = availableFieldsRef.current;
 
@@ -68,20 +76,22 @@ export function useApiGenerator(initialKeyword = "") {
       currentAvailable.length > 0 &&
       currentSelected.length < currentAvailable.length
     ) {
-      filtered.push({ key: "fields", value: currentSelected.join(",") });
+      params.push({ key: "fields", value: currentSelected.join(",") });
     }
 
-    return filtered;
+    return activeQueryParameters(params);
   }, [queryParameters]);
 
   const mutation = useMutation({
-    mutationFn: () => {
-      const finalParams = buildFinalParams();
-      return fetchEndpoint(keyword, finalParams);
-    },
-    onMutate: () => {
-      const finalParams = buildFinalParams();
-      const url = buildApiUrl(API_BASE_URL, keyword, finalParams);
+    mutationFn: ({ keyword: requestKeyword, params, itemId: requestItemId }: GenerateVariables) =>
+      fetchEndpoint(requestKeyword, params, requestItemId),
+    onMutate: (variables) => {
+      const url = buildApiUrl(
+        API_BASE_URL,
+        variables.keyword,
+        variables.params,
+        variables.itemId,
+      );
       setGeneratedUrl(url);
     },
     onSuccess: (data) => {
@@ -122,6 +132,7 @@ export function useApiGenerator(initialKeyword = "") {
 
       resetMutation();
       setKeywordState(newKeyword);
+      setItemId("");
       setGeneratedUrl("");
       setAiFieldsDiscovered(false);
 
@@ -216,28 +227,96 @@ export function useApiGenerator(initialKeyword = "") {
 
   const currentUrl = useMemo(() => {
     if (!keyword.trim()) return generatedUrl;
-    return buildApiUrl(API_BASE_URL, keyword, buildFinalParams());
-  }, [keyword, generatedUrl, buildFinalParams, selectedFields, availableFields]);
+    return buildApiUrl(API_BASE_URL, keyword, buildFinalParams(), itemId.trim() || undefined);
+  }, [keyword, itemId, generatedUrl, buildFinalParams, selectedFields, availableFields]);
 
-  const generate = useCallback(() => {
-    if (!keyword.trim()) {
+  const listUrl = useMemo(() => {
+    if (!keyword.trim()) return "";
+    return buildApiUrl(API_BASE_URL, keyword, buildFinalParams());
+  }, [keyword, buildFinalParams, selectedFields, availableFields]);
+
+  const detailUrl = useMemo(() => {
+    if (!keyword.trim() || !itemId.trim()) return "";
+    return buildApiUrl(API_BASE_URL, keyword, buildFinalParams(), itemId.trim());
+  }, [keyword, itemId, buildFinalParams, selectedFields, availableFields]);
+
+  const activeParams = useMemo(() => buildFinalParams(), [buildFinalParams]);
+
+  const listItemIds = useMemo(() => extractListItemIds(rawResponse), [rawResponse]);
+
+  const generateList = useCallback(() => {
+    const trimmed = keyword.trim();
+    if (!trimmed) {
       toast.error("Enter a keyword to generate an endpoint");
       return;
     }
-    mutation.mutate();
-  }, [keyword, mutation]);
+    mutation.mutate({
+      keyword: trimmed,
+      params: buildFinalParams(),
+    });
+  }, [keyword, mutation, buildFinalParams]);
+
+  const generateDetail = useCallback(() => {
+    const trimmed = keyword.trim();
+    const id = itemId.trim();
+    if (!trimmed) {
+      toast.error("Enter a keyword to generate an endpoint");
+      return;
+    }
+    if (!id) {
+      toast.error("Select or enter an item id");
+      return;
+    }
+    mutation.mutate({
+      keyword: trimmed,
+      params: buildFinalParams(),
+      itemId: id,
+    });
+  }, [keyword, itemId, mutation, buildFinalParams]);
+
+  const generate = generateList;
 
   const generateAsync = useCallback(async () => {
-    if (!keyword.trim()) {
+    const trimmed = keyword.trim();
+    if (!trimmed) {
       toast.error("Enter a keyword to generate an endpoint");
       return;
     }
-    await mutation.mutateAsync();
-  }, [keyword, mutation]);
+    await mutation.mutateAsync({
+      keyword: trimmed,
+      params: buildFinalParams(),
+    });
+  }, [keyword, mutation, buildFinalParams]);
+
+  const generateDetailAsync = useCallback(async () => {
+    const trimmed = keyword.trim();
+    const id = itemId.trim();
+    if (!trimmed) {
+      toast.error("Enter a keyword to generate an endpoint");
+      return;
+    }
+    if (!id) {
+      toast.error("Select or enter an item id");
+      return;
+    }
+    await mutation.mutateAsync({
+      keyword: trimmed,
+      params: buildFinalParams(),
+      itemId: id,
+    });
+  }, [keyword, itemId, mutation, buildFinalParams]);
 
   const updateQueryParam = useCallback((index: number, field: "key" | "value", value: string) => {
     setQueryParameters((prev) =>
       prev.map((param, i) => (i === index ? { ...param, [field]: value } : param)),
+    );
+  }, []);
+
+  const setQueryParamKey = useCallback((index: number, key: string) => {
+    setQueryParameters((prev) =>
+      prev.map((param, i) =>
+        i === index ? { key, value: getQueryParamDefaultValue(key) } : param,
+      ),
     );
   }, []);
 
@@ -250,12 +329,30 @@ export function useApiGenerator(initialKeyword = "") {
   }, []);
 
   const loadConfig = useCallback(
-    (newKeyword: string, params: QueryParameter[]) => {
+    (newKeyword: string, params: QueryParameter[], newItemId?: string) => {
       setQueryParameters(params.length > 0 ? params : [...defaultParams]);
+      setItemId(newItemId ?? "");
       applyKeywordChange(newKeyword);
     },
     [applyKeywordChange],
   );
+
+  const syncFromList = useCallback((newKeyword: string, params: QueryParameter[]) => {
+    setKeywordState(newKeyword);
+    setQueryParameters(params.length > 0 ? params : [...defaultParams]);
+    setItemId("");
+    setGeneratedUrl("");
+    setAiFieldsDiscovered(false);
+
+    const trimmed = newKeyword.trim();
+    const predefined = trimmed ? getPredefinedFields(trimmed) : null;
+    if (predefined) {
+      setSchemaSource("local");
+      setAvailableFields(predefined);
+      setSelectedFields(predefined);
+      setSchemaLoading(false);
+    }
+  }, []);
 
   const hasResponse = rawResponse !== null;
   const isPreviewFiltered =
@@ -266,9 +363,15 @@ export function useApiGenerator(initialKeyword = "") {
 
   return {
     keyword,
+    itemId,
+    setItemId,
+    listItemIds,
     setKeyword: applyKeywordChange,
     setKeywordInput,
     generatedUrl: currentUrl,
+    listUrl,
+    detailUrl,
+    activeParams,
     response: rawResponse,
     filteredResponse,
     isPreviewFiltered,
@@ -276,10 +379,14 @@ export function useApiGenerator(initialKeyword = "") {
     error: mutation.error?.message ?? null,
     queryParameters,
     updateQueryParam,
+    setQueryParamKey,
     addQueryParam,
     removeQueryParam,
     generate,
+    generateList,
+    generateDetail,
     generateAsync,
+    generateDetailAsync,
     reset: mutation.reset,
     selectedFields,
     setSelectedFields,
@@ -289,5 +396,6 @@ export function useApiGenerator(initialKeyword = "") {
     aiFieldsDiscovered,
     hasResponse,
     loadConfig,
+    syncFromList,
   };
 }

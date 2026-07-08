@@ -104,6 +104,11 @@ export default function DocsPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <CodeBlock code="GET /:keyword" />
+                  <CodeBlock code="GET /:keyword/:id" />
+                  <p className="text-sm text-muted-foreground">
+                    List endpoints return an array in <code>data</code>. Detail endpoints return a
+                    single object in <code>data</code> for the matching <code>id</code>.
+                  </p>
                   <Separator />
                   <div>
                     <h3 className="mb-2 text-sm font-medium">Popular endpoints</h3>
@@ -143,6 +148,50 @@ export default function DocsPage() {
                       ))}
                     </div>
                   </div>
+                </CardContent>
+              </Card>
+            </section>
+
+            <section id="list-detail" className="scroll-mt-24">
+              <Card>
+                <CardHeader>
+                  <CardTitle>List → Detail chaining</CardTitle>
+                  <CardDescription>
+                    Fetch a list, copy an item&apos;s <code>id</code>, then request that single
+                    record — the same pattern real frontends use for master/detail screens.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4 text-sm text-muted-foreground">
+                  <p>
+                    Every list item includes a stable <code>id</code>. Use{" "}
+                    <code>GET /:keyword/:id</code> to retrieve the matching record. IDs are
+                    deterministic when you use the same <code>seed</code> (or omit it — the server
+                    applies a default seed of <code>default</code>).
+                  </p>
+                  <div className="space-y-2">
+                    <p className="font-medium text-foreground">1. List items</p>
+                    <CodeBlock code={`${API_BASE_URL}/recipes?count=10&seed=demo`} />
+                  </div>
+                  <div className="space-y-2">
+                    <p className="font-medium text-foreground">2. Fetch one item by id</p>
+                    <CodeBlock
+                      code={`${API_BASE_URL}/recipes/{id-from-list}?seed=demo`}
+                    />
+                  </div>
+                  <p>
+                    If the <code>id</code> does not exist for that keyword and seed, the API returns{" "}
+                    <code>404</code>. In the{" "}
+                    <Link href="/playground" className="text-primary hover:underline">
+                      Playground
+                    </Link>
+                    , use the optional <strong className="text-foreground">Item ID</strong> field to
+                    paste an id from your list response, or click <strong className="text-foreground">Use</strong> on
+                    an id chip below the JSON preview.
+                  </p>
+                  <p className="text-xs">
+                    Not supported in v1: cross-resource nesting (e.g.{" "}
+                    <code>/posts/:id/comments</code>) or different field schemas for list vs detail.
+                  </p>
                 </CardContent>
               </Card>
             </section>

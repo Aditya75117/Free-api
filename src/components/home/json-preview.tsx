@@ -25,6 +25,8 @@ type JsonPreviewProps = {
   error: string | null;
   filterSlot?: ReactNode;
   filterHint?: string;
+  listItemIds?: string[];
+  onSelectItemId?: (id: string) => void;
   maxHeight?: number;
   compact?: boolean;
 };
@@ -36,6 +38,8 @@ export function JsonPreview({
   error,
   filterSlot,
   filterHint,
+  listItemIds = [],
+  onSelectItemId,
   maxHeight = 360,
   compact = false,
 }: JsonPreviewProps) {
@@ -78,6 +82,34 @@ export function JsonPreview({
 
         {filterHint && (
           <p className="text-xs leading-relaxed text-muted-foreground">{filterHint}</p>
+        )}
+
+        {listItemIds.length > 0 && onSelectItemId && (
+          <div className="space-y-2 rounded-lg border border-border bg-muted/30 px-3 py-2.5">
+            <p className="text-xs font-medium text-muted-foreground">
+              IDs from list — copy or use for detail request
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {listItemIds.map((id) => (
+                <div
+                  key={id}
+                  className="flex items-center gap-1 rounded-md border border-border bg-background px-2 py-1"
+                >
+                  <code className="max-w-[140px] truncate text-[11px]">{id}</code>
+                  <CopyButton value={id} label="Copy" size="icon" className="size-6" />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="xs"
+                    className="h-6 px-1.5 text-[11px]"
+                    onClick={() => onSelectItemId(id)}
+                  >
+                    Use
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
         )}
 
         <div
