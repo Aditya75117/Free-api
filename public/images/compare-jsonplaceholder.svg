@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" fill="none" role="img" aria-label="Feature comparison between JSONPlaceholder and ApiGenerator">
+  <rect width="640" height="400" rx="16" fill="#0a0a0a"/>
+  <rect x="40" y="60" width="260" height="280" rx="12" fill="#141414" stroke="#444"/>
+  <text x="120" y="100" fill="#999" font-family="sans-serif" font-size="14" font-weight="600">JSONPlaceholder</text>
+  <text x="60" y="140" fill="#666" font-family="monospace" font-size="11">/users (fixed)</text>
+  <text x="60" y="165" fill="#666" font-family="monospace" font-size="11">/posts (fixed)</text>
+  <text x="60" y="190" fill="#666" font-family="monospace" font-size="11">Static data</text>
+  <rect x="340" y="60" width="260" height="280" rx="12" fill="#1a1a1a" stroke="#7c3aed" stroke-width="2"/>
+  <text x="420" y="100" fill="#a78bfa" font-family="sans-serif" font-size="14" font-weight="600">ApiGenerator</text>
+  <text x="360" y="140" fill="#86efac" font-family="monospace" font-size="11">/any-keyword</text>
+  <text x="360" y="165" fill="#86efac" font-family="monospace" font-size="11">Query params</text>
+  <text x="360" y="190" fill="#86efac" font-family="monospace" font-size="11">AI schemas</text>
+  <text x="360" y="215" fill="#86efac" font-family="monospace" font-size="11">Field filtering</text>
+</svg>

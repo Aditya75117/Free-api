@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" fill="none" role="img" aria-label="Developer previewing mock REST API JSON responses">
+  <rect width="640" height="400" rx="16" fill="#0a0a0a"/>
+  <rect x="40" y="40" width="560" height="320" rx="12" fill="#141414" stroke="#333" stroke-width="1"/>
+  <rect x="60" y="60" width="200" height="28" rx="6" fill="#7c3aed" opacity="0.3"/>
+  <rect x="60" y="100" width="160" height="12" rx="4" fill="#444"/>
+  <rect x="60" y="120" width="120" height="12" rx="4" fill="#333"/>
+  <rect x="280" y="60" width="300" height="280" rx="8" fill="#1a1a1a" stroke="#333"/>
+  <text x="300" y="95" fill="#a78bfa" font-family="monospace" font-size="13">{</text>
+  <text x="320" y="120" fill="#86efac" font-family="monospace" font-size="12">"success": true,</text>
+  <text x="320" y="145" fill="#86efac" font-family="monospace" font-size="12">"keyword": "users",</text>
+  <text x="320" y="170" fill="#86efac" font-family="monospace" font-size="12">"data": [ ... ]</text>
+  <text x="300" y="195" fill="#a78bfa" font-family="monospace" font-size="13">}</text>
+  <circle cx="520" cy="320" r="24" fill="#7c3aed" opacity="0.8"/>
+  <path d="M512 320 L518 326 L530 314" stroke="white" stroke-width="2" fill="none"/>
+</svg>

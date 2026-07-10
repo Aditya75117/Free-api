@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ApiGenerator Frontend
 
-## Getting Started
+Next.js 16 frontend for [ApiGenerator](https://free-api-mu.vercel.app) — a free mock REST API generator.
 
-First, run the development server:
+## Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
+cp .env.example .env.local   # if present
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `NEXT_PUBLIC_SITE_URL` | `https://free-api-mu.vercel.app` | Canonical URL for metadata, sitemap, JSON-LD |
+| `NEXT_PUBLIC_API_BASE_URL` | `http://localhost:3001` (dev) | Mock API backend base URL |
 
-## Learn More
+## Page Structure
 
-To learn more about Next.js, take a look at the following resources:
+| Route | Purpose |
+|-------|---------|
+| `/` | Home + inline API generator |
+| `/playground` | Full API testing UI |
+| `/examples` | Endpoint grid hub |
+| `/examples/:slug` | SEO landing pages (16 endpoints) |
+| `/docs` | API documentation |
+| `/compare/jsonplaceholder` | JSONPlaceholder alternative |
+| `/compare/mockoon` | Mockoon alternative |
+| `/use-cases/react-mock-api` | React integration guide |
+| `/about` | About page |
+| `/groups` | Saved API groups (noindex) |
+| `/privacy`, `/terms` | Legal pages |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## SEO Conventions
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Metadata:** `src/constants/page-metadata.ts` — single source for titles, descriptions, keywords
+- **Content:** `src/constants/page-content.ts` — long-form copy for compare/use-case pages
+- **Endpoint landings:** `src/constants/endpoint-landing.ts` — per-slug SEO content + FAQs
+- **Sitemap:** `src/app/sitemap.ts` — auto-generated from routes
+- **Structured data:** `src/components/seo/json-ld.tsx` (site-wide) + `page-breadcrumb-json-ld.tsx` (sub-pages)
 
-## Deploy on Vercel
+## Scripts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Command | Description |
+|---------|-------------|
+| `pnpm dev` | Start dev server |
+| `pnpm build` | Production build |
+| `pnpm start` | Run production server |
+| `pnpm lint` | ESLint |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Related
+
+- [Backend README](../free-api-backend/README.md)
+- [Project README](../README.md)

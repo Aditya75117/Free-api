@@ -1,3 +1,11 @@
+/** Parses a comma-separated fields query value into a trimmed, non-empty list. */
+export function parseFieldList(fields: string): string[] {
+  return fields
+    .split(",")
+    .map((field) => field.trim())
+    .filter(Boolean);
+}
+
 /**
  * Extracts available field names from an API response by deriving keys from data items.
  */

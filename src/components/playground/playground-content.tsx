@@ -17,6 +17,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { API_BASE_URL } from "@/constants/api";
 import { AI_ENDPOINTS, POPULAR_ENDPOINTS } from "@/constants/endpoints";
+import { PLAYGROUND_INTRO } from "@/constants/page-content";
 import { useApiGenerator } from "@/hooks/use-api-generator";
 import { useApiGroups } from "@/hooks/use-api-groups";
 import { cn } from "@/lib/utils";
@@ -238,9 +239,14 @@ function PlaygroundInner() {
   return (
     <PageShell>
       <PageHeader
-        title="Playground"
+        title="API Testing Playground"
         description="Advanced testing interface with full control over endpoints and parameters."
       />
+
+      <div className="mb-8 max-w-3xl space-y-3 text-sm leading-relaxed text-muted-foreground">
+        <p>{PLAYGROUND_INTRO.paragraph1}</p>
+        <p>{PLAYGROUND_INTRO.paragraph2}</p>
+      </div>
 
       <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
         <aside className="space-y-4 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto">
@@ -249,7 +255,7 @@ function PlaygroundInner() {
               <CardTitle className="text-sm">Quick Select</CardTitle>
               <CardDescription>Popular endpoint keywords</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-1">
+            <CardContent className="max-h-56 space-y-1 overflow-y-auto overscroll-contain pr-1">
               {POPULAR_ENDPOINTS.map((endpoint) => (
                 <button
                   key={endpoint.keyword}
