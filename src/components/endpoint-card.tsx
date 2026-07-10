@@ -3,8 +3,15 @@
 import Link from "next/link";
 import {
   BookOpen,
+  Building2,
+  Car,
+  CheckSquare,
+  ChefHat,
   FileText,
   Film,
+  Image,
+  Images,
+  MapPin,
   MessageSquare,
   ShoppingBag,
   Users,
@@ -23,6 +30,13 @@ const ICON_MAP: Record<string, LucideIcon> = {
   "book-open": BookOpen,
   film: Film,
   "message-square": MessageSquare,
+  "chef-hat": ChefHat,
+  image: Image,
+  images: Images,
+  "check-square": CheckSquare,
+  "building-2": Building2,
+  car: Car,
+  "map-pin": MapPin,
   dog: Users,
   globe: BookOpen,
   receipt: FileText,
@@ -49,7 +63,6 @@ export function EndpointCard({
   exampleHref,
   playgroundHref,
 }: EndpointCardProps) {
-  // icon can be either a key into ICON_MAP (string) or a LucideIcon component
   const Icon = icon
     ? typeof icon === "string"
       ? ICON_MAP[icon]

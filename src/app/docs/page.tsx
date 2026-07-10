@@ -10,16 +10,12 @@ import { API_BASE_URL } from "@/constants/api";
 import { DOC_TOC_ITEMS } from "@/constants/docs-sections";
 import { FAQ_ITEMS } from "@/constants/faq";
 import { AI_ENDPOINTS, POPULAR_ENDPOINTS } from "@/constants/endpoints";
+import { DOCS_REACT_SNIPPET } from "@/constants/page-content";
+import { PAGE_METADATA } from "@/constants/page-metadata";
 import { QUERY_PARAM_DOCS } from "@/constants/query-params";
 import { buildPageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = buildPageMetadata({
-  title: "Documentation",
-  description:
-    "Mock API documentation for ApiGenerator. Learn REST endpoint usage, query parameters, pagination, field filtering, and code snippets.",
-  path: "/docs",
-  keywords: ["mock api documentation", "rest api query parameters", "pagination", "field filtering"],
-});
+export const metadata: Metadata = buildPageMetadata(PAGE_METADATA.docs);
 
 const CODE_SNIPPETS = [
   {
@@ -41,8 +37,8 @@ export default function DocsPage() {
     <div className="border-b border-border">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:py-16">
         <PageHeader
-          title="Documentation"
-          description="Learn how to use ApiGenerator endpoints in your projects."
+          title="Mock API Documentation"
+          description="Learn how to use ApiGenerator endpoints, query parameters, and code snippets in your projects."
           className="mb-10"
         />
 
@@ -55,7 +51,7 @@ export default function DocsPage() {
             <section id="getting-started" className="scroll-mt-24">
               <Card>
                 <CardHeader>
-                  <CardTitle>Getting started in 30 seconds</CardTitle>
+                  <CardTitle as="h2">Getting started in 30 seconds</CardTitle>
                   <CardDescription>
                     No signup, no setup — just hit an endpoint and get JSON back.
                   </CardDescription>
@@ -85,7 +81,7 @@ export default function DocsPage() {
             <section id="base-url" className="scroll-mt-24">
               <Card>
                 <CardHeader>
-                  <CardTitle>Base URL</CardTitle>
+                  <CardTitle as="h2">Base URL</CardTitle>
                   <CardDescription>All requests are made against this base URL.</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -97,7 +93,7 @@ export default function DocsPage() {
             <section id="endpoints" className="scroll-mt-24">
               <Card>
                 <CardHeader>
-                  <CardTitle>Endpoints</CardTitle>
+                  <CardTitle as="h2">Endpoints</CardTitle>
                   <CardDescription>
                     Use any keyword as a path segment. The API returns an array of mock objects.
                   </CardDescription>
@@ -111,7 +107,7 @@ export default function DocsPage() {
                   </p>
                   <Separator />
                   <div>
-                    <h3 className="mb-2 text-sm font-medium">Popular endpoints</h3>
+                    <h3 className="mb-2 text-base font-medium">Popular endpoints</h3>
                     <div className="space-y-2">
                       {POPULAR_ENDPOINTS.map((endpoint) => (
                         <div
@@ -130,7 +126,7 @@ export default function DocsPage() {
                     </div>
                   </div>
                   <div>
-                    <h3 className="mb-2 text-sm font-medium">AI-powered endpoints</h3>
+                    <h3 className="mb-2 text-base font-medium">AI-powered endpoints</h3>
                     <div className="space-y-2">
                       {AI_ENDPOINTS.map((endpoint) => (
                         <div
@@ -155,7 +151,7 @@ export default function DocsPage() {
             <section id="list-detail" className="scroll-mt-24">
               <Card>
                 <CardHeader>
-                  <CardTitle>List → Detail chaining</CardTitle>
+                  <CardTitle as="h2">List → Detail chaining</CardTitle>
                   <CardDescription>
                     Fetch a list, copy an item&apos;s <code>id</code>, then request that single
                     record — the same pattern real frontends use for master/detail screens.
@@ -199,7 +195,7 @@ export default function DocsPage() {
             <section id="query-parameters" className="scroll-mt-24">
               <Card>
                 <CardHeader>
-                  <CardTitle>Query Parameters</CardTitle>
+                  <CardTitle as="h2">Query Parameters</CardTitle>
                   <CardDescription>
                     Optional parameters to customize responses.{" "}
                     <Link href="/playground" className="text-primary hover:underline">
@@ -243,7 +239,7 @@ export default function DocsPage() {
             <section id="response-fields" className="scroll-mt-24">
               <Card>
                 <CardHeader>
-                  <CardTitle>Response Fields</CardTitle>
+                  <CardTitle as="h2">Response Fields</CardTitle>
                   <CardDescription>
                     Limit which fields appear in each item using the{" "}
                     <code className="rounded bg-muted px-1 py-0.5 text-xs">fields</code> query
@@ -274,16 +270,20 @@ export default function DocsPage() {
             <section id="code-snippets" className="scroll-mt-24">
               <Card>
                 <CardHeader>
-                  <CardTitle>Code Snippets</CardTitle>
+                  <CardTitle as="h2">Code Snippets</CardTitle>
                   <CardDescription>Copy-ready examples for common HTTP clients.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   {CODE_SNIPPETS.map((snippet) => (
                     <div key={snippet.title}>
-                      <p className="mb-2 text-sm font-medium">{snippet.title}</p>
+                      <h3 className="mb-2 text-base font-medium">{snippet.title}</h3>
                       <CodeBlock code={snippet.code} />
                     </div>
                   ))}
+                  <div>
+                    <h3 className="mb-2 text-base font-medium">{DOCS_REACT_SNIPPET.title}</h3>
+                    <CodeBlock code={DOCS_REACT_SNIPPET.code} />
+                  </div>
                 </CardContent>
               </Card>
             </section>
@@ -291,7 +291,7 @@ export default function DocsPage() {
             <section id="comparison" className="scroll-mt-24">
               <Card>
                 <CardHeader>
-                  <CardTitle>ApiGenerator vs JSONPlaceholder vs Mockoon</CardTitle>
+                  <CardTitle as="h2">ApiGenerator vs JSONPlaceholder vs Mockoon</CardTitle>
                   <CardDescription>
                     An honest comparison to help you pick the right tool.
                   </CardDescription>
@@ -311,22 +311,30 @@ export default function DocsPage() {
                     <strong className="text-foreground">ApiGenerator</strong> sits in between: zero
                     setup, any keyword as an endpoint, query parameters for count/pagination/filtering,
                     AI-generated data for custom schemas, and a browser playground — all free and
-                    instant.
+                    instant. See our full{" "}
+                    <Link href="/compare/jsonplaceholder" className="text-primary hover:underline">
+                      JSONPlaceholder comparison
+                    </Link>{" "}
+                    or{" "}
+                    <Link href="/compare/mockoon" className="text-primary hover:underline">
+                      Mockoon alternative
+                    </Link>{" "}
+                    pages for details.
                   </p>
                 </CardContent>
               </Card>
             </section>
 
-            <section id="faq" className="scroll-mt-24">
+            <section id="faq" className="scroll-mt-24" aria-labelledby="faq-heading">
               <Card>
                 <CardHeader>
-                  <CardTitle>FAQ</CardTitle>
+                  <CardTitle as="h2" id="faq-heading">FAQ</CardTitle>
                   <CardDescription>Common questions about mock APIs and ApiGenerator.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   {FAQ_ITEMS.map((item) => (
                     <div key={item.question}>
-                      <h3 className="font-medium">{item.question}</h3>
+                      <h3 className="text-base font-medium">{item.question}</h3>
                       <p className="mt-2 text-sm text-muted-foreground">{item.answer}</p>
                     </div>
                   ))}

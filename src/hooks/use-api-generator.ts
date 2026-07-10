@@ -9,12 +9,18 @@ import { DEFAULT_QUERY_PARAMS } from "@/constants/api";
 import { getPredefinedFields } from "@/constants/field-schemas";
 import { getQueryParamDefaultValue } from "@/constants/query-params";
 import { fetchEndpoint, fetchSchema } from "@/services/api";
+import {
+  buildEffectiveParams,
+  getExplicitFieldsParam,
+  upsertFieldsQueryParam,
+} from "@/utils/build-effective-params";
 import { activeQueryParameters, buildApiUrl } from "@/utils/url";
 import {
   extractAvailableFields,
   extractListItemIds,
   filterResponseByFields,
   isAiResponse,
+  parseFieldList,
 } from "@/utils/response-fields";
 import type { QueryParameter } from "@/types/api";
 
@@ -62,25 +68,27 @@ export function useApiGenerator(initialKeyword = "") {
   const schemaAbortRef = useRef<AbortController | null>(null);
   const selectedFieldsRef = useRef(selectedFields);
   const availableFieldsRef = useRef(availableFields);
+  const queryParametersRef = useRef(queryParameters);
 
   selectedFieldsRef.current = selectedFields;
   availableFieldsRef.current = availableFields;
+  queryParametersRef.current = queryParameters;
+
+  const applyFieldsFromQueryValue = useCallback((value: string) => {
+    const parsed = parseFieldList(value);
+    if (parsed.length === 0) return;
+
+    setAvailableFields((prev) => mergeFieldLists(prev, parsed));
+    setSelectedFields(parsed);
+  }, []);
 
   const buildFinalParams = useCallback((): QueryParameter[] => {
-    const params = queryParameters.filter((p) => p.key !== "fields");
-    const currentSelected = selectedFieldsRef.current;
-    const currentAvailable = availableFieldsRef.current;
-
-    if (
-      currentSelected.length > 0 &&
-      currentAvailable.length > 0 &&
-      currentSelected.length < currentAvailable.length
-    ) {
-      params.push({ key: "fields", value: currentSelected.join(",") });
-    }
-
-    return activeQueryParameters(params);
-  }, [queryParameters]);
+    return buildEffectiveParams(
+      queryParametersRef.current,
+      selectedFieldsRef.current,
+      availableFieldsRef.current,
+    );
+  }, [queryParameters, selectedFields, availableFields]);
 
   const mutation = useMutation({
     mutationFn: ({ keyword: requestKeyword, params, itemId: requestItemId }: GenerateVariables) =>
@@ -97,13 +105,14 @@ export function useApiGenerator(initialKeyword = "") {
     onSuccess: (data) => {
       const currentSelected = selectedFieldsRef.current;
       const currentAvailable = availableFieldsRef.current;
+      const explicitFields = getExplicitFieldsParam(queryParametersRef.current);
       const fieldsWereFiltered =
         currentSelected.length > 0 &&
         currentAvailable.length > 0 &&
         currentSelected.length < currentAvailable.length;
 
       const keys = extractAvailableFields(data);
-      if (keys.length > 0 && !fieldsWereFiltered) {
+      if (keys.length > 0 && !fieldsWereFiltered && !explicitFields) {
         if (currentAvailable.length === 0) {
           setAvailableFields(keys);
           setSelectedFields(keys);
@@ -186,13 +195,30 @@ export function useApiGenerator(initialKeyword = "") {
         const schema = await fetchSchema(trimmed);
         if (controller.signal.aborted) return;
         setSchemaSource(schema.source);
+
+        const explicitFields = getExplicitFieldsParam(queryParametersRef.current);
+        const explicitFieldList = explicitFields ? parseFieldList(explicitFields.value) : [];
+
         if (schema.source === "local" && schema.fields.length > 0) {
-          setAvailableFields(schema.fields);
-          setSelectedFields(schema.fields);
+          if (explicitFieldList.length > 0) {
+            setAvailableFields(mergeFieldLists(schema.fields, explicitFieldList));
+            setSelectedFields(explicitFieldList);
+          } else {
+            setAvailableFields(schema.fields);
+            setSelectedFields(schema.fields);
+          }
         } else if (schema.source === "ai" && schema.discovered && schema.fields.length > 0) {
-          setAvailableFields(schema.fields);
-          setSelectedFields(schema.fields);
+          if (explicitFieldList.length > 0) {
+            setAvailableFields(mergeFieldLists(schema.fields, explicitFieldList));
+            setSelectedFields(explicitFieldList);
+          } else {
+            setAvailableFields(schema.fields);
+            setSelectedFields(schema.fields);
+          }
           setAiFieldsDiscovered(true);
+        } else if (explicitFieldList.length > 0) {
+          setAvailableFields(explicitFieldList);
+          setSelectedFields(explicitFieldList);
         } else {
           setAvailableFields([]);
           setSelectedFields([]);
@@ -306,17 +332,48 @@ export function useApiGenerator(initialKeyword = "") {
     });
   }, [keyword, itemId, mutation, buildFinalParams]);
 
-  const updateQueryParam = useCallback((index: number, field: "key" | "value", value: string) => {
-    setQueryParameters((prev) =>
-      prev.map((param, i) => (i === index ? { ...param, [field]: value } : param)),
-    );
-  }, []);
+  const updateQueryParam = useCallback(
+    (index: number, field: "key" | "value", value: string) => {
+      setQueryParameters((prev) => {
+        const next = prev.map((param, i) => (i === index ? { ...param, [field]: value } : param));
+        const updated = next[index];
 
-  const setQueryParamKey = useCallback((index: number, key: string) => {
+        if (updated?.key === "fields") {
+          if (field === "value") {
+            applyFieldsFromQueryValue(value);
+          } else if (field === "key" && updated.value.trim()) {
+            applyFieldsFromQueryValue(updated.value);
+          }
+        }
+
+        return next;
+      });
+    },
+    [applyFieldsFromQueryValue],
+  );
+
+  const setQueryParamKey = useCallback(
+    (index: number, key: string) => {
+      setQueryParameters((prev) => {
+        const next = prev.map((param, i) =>
+          i === index ? { key, value: getQueryParamDefaultValue(key) } : param,
+        );
+        const updated = next[index];
+
+        if (key === "fields" && updated?.value.trim()) {
+          applyFieldsFromQueryValue(updated.value);
+        }
+
+        return next;
+      });
+    },
+    [applyFieldsFromQueryValue],
+  );
+
+  const setSelectedFieldsFromUi = useCallback((fields: string[]) => {
+    setSelectedFields(fields);
     setQueryParameters((prev) =>
-      prev.map((param, i) =>
-        i === index ? { key, value: getQueryParamDefaultValue(key) } : param,
-      ),
+      upsertFieldsQueryParam(prev, fields, availableFieldsRef.current),
     );
   }, []);
 
@@ -330,11 +387,17 @@ export function useApiGenerator(initialKeyword = "") {
 
   const loadConfig = useCallback(
     (newKeyword: string, params: QueryParameter[], newItemId?: string) => {
-      setQueryParameters(params.length > 0 ? params : [...defaultParams]);
-      setItemId(newItemId ?? "");
+      const resolvedParams = params.length > 0 ? params : [...defaultParams];
       applyKeywordChange(newKeyword);
+      setQueryParameters(resolvedParams);
+      setItemId(newItemId ?? "");
+
+      const explicitFields = getExplicitFieldsParam(resolvedParams);
+      if (explicitFields) {
+        applyFieldsFromQueryValue(explicitFields.value);
+      }
     },
-    [applyKeywordChange],
+    [applyKeywordChange, applyFieldsFromQueryValue],
   );
 
   const syncFromList = useCallback((newKeyword: string, params: QueryParameter[]) => {
@@ -346,13 +409,25 @@ export function useApiGenerator(initialKeyword = "") {
 
     const trimmed = newKeyword.trim();
     const predefined = trimmed ? getPredefinedFields(trimmed) : null;
+    const explicitFields = getExplicitFieldsParam(params);
+
+    if (explicitFields) {
+      applyFieldsFromQueryValue(explicitFields.value);
+      if (predefined) {
+        setSchemaSource("local");
+        setAvailableFields((prev) => mergeFieldLists(predefined, prev));
+        setSchemaLoading(false);
+      }
+      return;
+    }
+
     if (predefined) {
       setSchemaSource("local");
       setAvailableFields(predefined);
       setSelectedFields(predefined);
       setSchemaLoading(false);
     }
-  }, []);
+  }, [applyFieldsFromQueryValue]);
 
   const hasResponse = rawResponse !== null;
   const isPreviewFiltered =
@@ -389,7 +464,7 @@ export function useApiGenerator(initialKeyword = "") {
     generateDetailAsync,
     reset: mutation.reset,
     selectedFields,
-    setSelectedFields,
+    setSelectedFields: setSelectedFieldsFromUi,
     availableFields,
     schemaSource,
     schemaLoading,
