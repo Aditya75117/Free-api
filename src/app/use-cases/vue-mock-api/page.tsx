@@ -43,7 +43,7 @@ export default function VueMockApiPage() {
       </PageSection>
 
       <PageSection>
-        <article className="space-y-8">
+        <article className="min-w-0 max-w-full space-y-8">
           <section>
             <h2 className="text-2xl font-bold tracking-tight">Composable with onMounted</h2>
             <p className="mt-2 text-sm text-muted-foreground">

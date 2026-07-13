@@ -7,7 +7,6 @@ import { PageSection } from "@/components/layout/page-section";
 import { Breadcrumbs } from "@/components/seo/breadcrumbs";
 import { FaqJsonLd } from "@/components/seo/faq-json-ld";
 import { PageBreadcrumbJsonLd } from "@/components/seo/page-breadcrumb-json-ld";
-import { SeoImage } from "@/components/seo/seo-image";
 import { buttonVariants } from "@/components/ui/button";
 import { REACT_USE_CASE } from "@/constants/page-content";
 import { PAGE_METADATA } from "@/constants/page-metadata";
@@ -30,31 +29,22 @@ export default function ReactMockApiPage() {
       <PageSection>
         <Breadcrumbs items={crumbs} className="mb-6" />
         <PageHeader title={REACT_USE_CASE.title} description={REACT_USE_CASE.intro} />
-        <div className="grid gap-8 lg:grid-cols-2">
-          <SeoImage
-            src="/images/use-case-react.svg"
-            alt="React component fetching data from a mock REST API endpoint"
-            width={640}
-            height={400}
-            className="w-full"
-          />
-          <p className="text-muted-foreground leading-relaxed">
-            ApiGenerator endpoints are standard REST URLs — use them with any HTTP client. Start
-            with the{" "}
-            <Link href="/examples/users" className="text-primary hover:underline">
-              mock users API
-            </Link>{" "}
-            or browse all{" "}
-            <Link href="/examples" className="text-primary hover:underline">
-              example endpoints
-            </Link>
-            .
-          </p>
-        </div>
+        <p className="text-muted-foreground leading-relaxed">
+          ApiGenerator endpoints are standard REST URLs — use them with any HTTP client. Start
+          with the{" "}
+          <Link href="/examples/users" className="text-primary hover:underline">
+            mock users API
+          </Link>{" "}
+          or browse all{" "}
+          <Link href="/examples" className="text-primary hover:underline">
+            example endpoints
+          </Link>
+          .
+        </p>
       </PageSection>
 
       <PageSection>
-        <article className="space-y-8">
+        <article className="min-w-0 max-w-full space-y-8">
           <section>
             <h2 className="text-2xl font-bold tracking-tight">Fetch with useEffect</h2>
             <p className="mt-2 text-sm text-muted-foreground">

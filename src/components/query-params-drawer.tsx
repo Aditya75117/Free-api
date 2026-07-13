@@ -39,7 +39,7 @@ export function QueryParamsDrawer({ open, onOpenChange }: QueryParamsDrawerProps
           {QUERY_PARAM_DOCS.map((param) => (
             <article
               key={param.name}
-              className="rounded-lg border border-border p-4"
+              className="min-w-0 max-w-full rounded-lg border border-border p-4 break-words"
             >
               <div className="space-y-2">
                 <div className="flex flex-wrap items-center gap-2">

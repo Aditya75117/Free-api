@@ -24,7 +24,7 @@ export function PageSection({
       id={id}
       className={cn(bordered && "border-b border-border", className)}
     >
-      <div className="mx-auto max-w-6xl space-y-6 px-4 py-16 sm:px-6">
+      <div className="mx-auto w-full min-w-0 max-w-6xl space-y-6 px-4 py-16 sm:px-6">
         {(title || description) && (
           <div>
             {title && <h2 className="text-2xl font-bold tracking-tight">{title}</h2>}

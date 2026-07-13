@@ -86,19 +86,19 @@ export function JsonPreview({
             <p className="text-xs font-medium text-muted-foreground">
               IDs from list — copy or use for detail request
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-col gap-2">
               {listItemIds.map((id) => (
                 <div
                   key={id}
-                  className="flex items-center gap-1 rounded-md border border-border bg-background px-2 py-1"
+                  className="flex w-full min-w-0 items-center gap-2 rounded-md border border-border bg-background px-2 py-1.5"
                 >
-                  <code className="max-w-[140px] truncate text-[11px]">{id}</code>
-                  <CopyButton value={id} label="Copy" size="icon" className="size-6" />
+                  <code className="min-w-0 flex-1 truncate text-[11px]">{id}</code>
+                  <CopyButton value={id} label="Copy" size="icon" className="size-6 shrink-0" />
                   <Button
                     type="button"
                     variant="ghost"
                     size="xs"
-                    className="h-6 px-1.5 text-[11px]"
+                    className="h-6 shrink-0 px-1.5 text-[11px]"
                     onClick={() => onSelectItemId(id)}
                   >
                     Use

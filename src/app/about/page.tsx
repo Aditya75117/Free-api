@@ -18,15 +18,15 @@ export const metadata: Metadata = buildPageMetadata(PAGE_METADATA.about);
 export default function AboutPage() {
   return (
     <div className="border-b border-border">
-      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+      <div className="mx-auto w-full min-w-0 max-w-6xl px-4 py-16 sm:px-6">
         <PageHeader
           title="About ApiGenerator"
           description="A free, open-source mock REST API generator for frontend developers."
           className="mb-8"
         />
 
-        <div className="grid gap-8 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-12 xl:grid-cols-[240px_minmax(0,720px)]">
-          <aside className="lg:sticky lg:top-24 lg:self-start">
+        <div className="grid min-w-0 gap-8 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-12 xl:grid-cols-[240px_minmax(0,720px)]">
+          <aside className="hidden min-w-0 lg:sticky lg:top-24 lg:block lg:self-start">
             <DocsToc items={[...ABOUT_TOC_ITEMS]} />
           </aside>
 
