@@ -37,15 +37,15 @@ export default function DocsPage() {
   return (
     <div className="border-b border-border">
       <FaqJsonLd faqs={FAQ_ITEMS} />
-      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+      <div className="mx-auto w-full min-w-0 max-w-6xl px-4 py-16 sm:px-6">
         <PageHeader
           title="Mock API Documentation"
           description="Learn how to use ApiGenerator endpoints, query parameters, and code snippets in your projects."
           className="mb-8"
         />
 
-        <div className="grid gap-8 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-12 xl:grid-cols-[240px_minmax(0,720px)]">
-          <aside className="lg:sticky lg:top-24 lg:self-start">
+        <div className="grid min-w-0 gap-8 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-12 xl:grid-cols-[240px_minmax(0,720px)]">
+          <aside className="hidden min-w-0 lg:sticky lg:top-24 lg:block lg:self-start">
             <DocsToc items={[...DOC_TOC_ITEMS]} />
           </aside>
 
@@ -206,7 +206,7 @@ export default function DocsPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm">
-                  <div className="hidden gap-4 rounded-md bg-muted/50 px-3 py-2 font-medium sm:grid sm:grid-cols-[120px_80px_1fr]">
+                  <div className="hidden gap-4 rounded-md bg-muted/50 px-3 py-2 font-medium sm:grid sm:grid-cols-[120px_80px_minmax(0,1fr)]">
                     <span>Parameter</span>
                     <span>Type</span>
                     <span>Description</span>
@@ -214,13 +214,18 @@ export default function DocsPage() {
                   {QUERY_PARAM_DOCS.map((param, index) => (
                     <div
                       key={param.name}
-                      className={`space-y-1 rounded-md px-3 py-2 text-muted-foreground sm:grid sm:grid-cols-[120px_80px_1fr] sm:gap-4 sm:space-y-0 ${
+                      className={`flex flex-col gap-1.5 rounded-md px-3 py-2 text-muted-foreground sm:grid sm:grid-cols-[120px_80px_minmax(0,1fr)] sm:items-start sm:gap-4 ${
                         index % 2 === 0 ? "bg-muted/20" : ""
                       }`}
                     >
-                      <code className="text-foreground">{param.name}</code>
-                      <span>{param.type}</span>
-                      <span>
+                      <div className="flex min-w-0 flex-wrap items-center gap-2 sm:contents">
+                        <code className="text-foreground">{param.name}</code>
+                        <span className="text-muted-foreground/50 sm:hidden" aria-hidden>
+                          →
+                        </span>
+                        <span className="font-mono text-xs sm:text-sm">{param.type}</span>
+                      </div>
+                      <span className="min-w-0 leading-relaxed sm:col-start-3">
                         {param.description}
                         {param.default && (
                           <span className="mt-0.5 block text-xs">

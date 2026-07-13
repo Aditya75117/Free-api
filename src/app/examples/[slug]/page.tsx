@@ -79,8 +79,8 @@ export default async function ExampleLandingPage({ params }: PageProps) {
       </PageSection>
 
       <PageSection>
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
-          <article className="space-y-8">
+        <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,320px)]">
+          <article className="min-w-0 space-y-8">
             <p className="leading-relaxed text-muted-foreground">{landing.body}</p>
 
             <Card>
@@ -144,7 +144,7 @@ export default async function ExampleLandingPage({ params }: PageProps) {
             </p>
           </article>
 
-          <aside aria-label="Endpoint details" className="space-y-4">
+          <aside aria-label="Endpoint details" className="min-w-0 space-y-4">
             <Card>
               <CardHeader>
                 <CardTitle as="h2" className="text-base">

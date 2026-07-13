@@ -65,7 +65,7 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col font-sans">
+      <body className="flex min-h-full min-w-0 flex-col font-sans">
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
@@ -75,7 +75,7 @@ export default function RootLayout({
         <SiteJsonLd />
         <AppProviders>
           <Navbar />
-          <main id="main-content" className="flex-1">
+          <main id="main-content" className="min-w-0 flex-1">
             {children}
           </main>
           <Footer />

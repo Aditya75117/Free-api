@@ -15,7 +15,7 @@ export default function PrivacyPage() {
         title={PRIVACY_CONTENT.title}
         description={`Last updated: ${PRIVACY_CONTENT.lastUpdated}`}
       />
-      <article className="prose prose-neutral dark:prose-invert max-w-none space-y-8">
+      <article className="prose prose-neutral dark:prose-invert min-w-0 max-w-none space-y-8 break-words">
         {PRIVACY_CONTENT.sections.map((section) => (
           <section key={section.heading}>
             <h2 className="text-2xl font-bold tracking-tight">{section.heading}</h2>

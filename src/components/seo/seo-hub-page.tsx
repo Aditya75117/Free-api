@@ -28,7 +28,7 @@ export function SeoHubPage({ content, crumbLabel }: SeoHubPageProps) {
       <PageSection>
         <Breadcrumbs items={crumbs} className="mb-6" />
         <PageHeader title={content.title} description={content.intro} />
-        <article className="space-y-8">
+        <article className="min-w-0 max-w-full space-y-8">
           {content.sections.map((section) => (
             <section key={section.heading}>
               <h2 className="text-2xl font-bold tracking-tight">{section.heading}</h2>

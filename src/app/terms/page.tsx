@@ -15,7 +15,7 @@ export default function TermsPage() {
         title={TERMS_CONTENT.title}
         description={`Last updated: ${TERMS_CONTENT.lastUpdated}`}
       />
-      <article className="prose prose-neutral dark:prose-invert max-w-none space-y-8">
+      <article className="prose prose-neutral dark:prose-invert min-w-0 max-w-none space-y-8 break-words">
         {TERMS_CONTENT.sections.map((section) => (
           <section key={section.heading}>
             <h2 className="text-2xl font-bold tracking-tight">{section.heading}</h2>

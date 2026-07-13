@@ -12,7 +12,7 @@ export function PageShell({ children, width = "default", className }: PageShellP
   return (
     <div
       className={cn(
-        "mx-auto px-4 py-16 sm:px-6",
+        "mx-auto w-full min-w-0 px-4 py-16 sm:px-6",
         width === "narrow" ? "max-w-4xl" : "max-w-6xl",
         className,
       )}

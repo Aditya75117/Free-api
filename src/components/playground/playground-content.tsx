@@ -254,8 +254,8 @@ function PlaygroundInner() {
         <p>{PLAYGROUND_INTRO.paragraph2}</p>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
-        <aside className="space-y-4 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto">
+      <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,280px)_minmax(0,1fr)]">
+        <aside className="min-w-0 space-y-4 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto">
           <Card>
             <CardHeader>
               <CardTitle className="text-sm">Quick Select</CardTitle>
@@ -377,16 +377,18 @@ function PlaygroundInner() {
           )}
         </aside>
 
-        <div className="space-y-6">
+        <div className="min-w-0 space-y-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <List className="size-5 text-primary" />
                 List API
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="min-w-0">
                 Generate a list of items first. Base URL:{" "}
-                <code className="rounded bg-muted px-1.5 py-0.5 text-xs">{API_BASE_URL}</code>
+                <code className="inline-block max-w-full break-all rounded bg-muted px-1.5 py-0.5 text-xs">
+                  {API_BASE_URL}
+                </code>
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -504,19 +506,19 @@ function PlaygroundInner() {
                   Copy an id and paste it into the Item ID field below, or click Use to fill it
                   automatically.
                 </p>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-col gap-2">
                   {listItemIds.map((id) => (
                     <div
                       key={id}
-                      className="flex items-center gap-1 rounded-md border border-border bg-background px-2 py-1"
+                      className="flex w-full min-w-0 items-center gap-2 rounded-md border border-border bg-background px-2 py-1.5"
                     >
-                      <code className="max-w-[140px] truncate text-[11px]">{id}</code>
-                      <CopyButton value={id} label="Copy" size="icon" className="size-6" />
+                      <code className="min-w-0 flex-1 truncate text-[11px]">{id}</code>
+                      <CopyButton value={id} label="Copy" size="icon" className="size-6 shrink-0" />
                       <Button
                         type="button"
                         variant={detailApi.itemId === id ? "secondary" : "ghost"}
                         size="xs"
-                        className="h-6 px-1.5 text-[11px]"
+                        className="h-6 shrink-0 px-1.5 text-[11px]"
                         onClick={() => detailApi.setItemId(id)}
                       >
                         Use
