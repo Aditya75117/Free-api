@@ -4,6 +4,7 @@ import Link from "next/link";
 import { CodeBlock } from "@/components/code-block";
 import { DocsToc } from "@/components/docs/docs-toc";
 import { PageHeader } from "@/components/layout/page-header";
+import { FaqJsonLd } from "@/components/seo/faq-json-ld";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { API_BASE_URL } from "@/constants/api";
@@ -35,14 +36,15 @@ const CODE_SNIPPETS = [
 export default function DocsPage() {
   return (
     <div className="border-b border-border">
-      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:py-16">
+      <FaqJsonLd faqs={FAQ_ITEMS} />
+      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
         <PageHeader
           title="Mock API Documentation"
           description="Learn how to use ApiGenerator endpoints, query parameters, and code snippets in your projects."
-          className="mb-10"
+          className="mb-8"
         />
 
-        <div className="grid gap-10 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-12 xl:grid-cols-[240px_minmax(0,720px)]">
+        <div className="grid gap-8 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-12 xl:grid-cols-[240px_minmax(0,720px)]">
           <aside className="lg:sticky lg:top-24 lg:self-start">
             <DocsToc items={[...DOC_TOC_ITEMS]} />
           </aside>
@@ -273,7 +275,7 @@ export default function DocsPage() {
                   <CardTitle as="h2">Code Snippets</CardTitle>
                   <CardDescription>Copy-ready examples for common HTTP clients.</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-6">
+                <CardContent className="space-y-4">
                   {CODE_SNIPPETS.map((snippet) => (
                     <div key={snippet.title}>
                       <h3 className="mb-2 text-base font-medium">{snippet.title}</h3>
@@ -288,50 +290,13 @@ export default function DocsPage() {
               </Card>
             </section>
 
-            <section id="comparison" className="scroll-mt-24">
-              <Card>
-                <CardHeader>
-                  <CardTitle as="h2">ApiGenerator vs JSONPlaceholder vs Mockoon</CardTitle>
-                  <CardDescription>
-                    An honest comparison to help you pick the right tool.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4 text-sm text-muted-foreground">
-                  <p>
-                    <strong className="text-foreground">JSONPlaceholder</strong> is great for fixed,
-                    predictable endpoints with static data. It&apos;s ideal when you only need users,
-                    posts, and comments.
-                  </p>
-                  <p>
-                    <strong className="text-foreground">Mockoon</strong> is a powerful desktop mock
-                    server for complex API simulations with custom routes, rules, and environments.
-                    It requires local setup and configuration.
-                  </p>
-                  <p>
-                    <strong className="text-foreground">ApiGenerator</strong> sits in between: zero
-                    setup, any keyword as an endpoint, query parameters for count/pagination/filtering,
-                    AI-generated data for custom schemas, and a browser playground — all free and
-                    instant. See our full{" "}
-                    <Link href="/compare/jsonplaceholder" className="text-primary hover:underline">
-                      JSONPlaceholder comparison
-                    </Link>{" "}
-                    or{" "}
-                    <Link href="/compare/mockoon" className="text-primary hover:underline">
-                      Mockoon alternative
-                    </Link>{" "}
-                    pages for details.
-                  </p>
-                </CardContent>
-              </Card>
-            </section>
-
             <section id="faq" className="scroll-mt-24" aria-labelledby="faq-heading">
               <Card>
                 <CardHeader>
                   <CardTitle as="h2" id="faq-heading">FAQ</CardTitle>
                   <CardDescription>Common questions about mock APIs and ApiGenerator.</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-6">
+                <CardContent className="space-y-4">
                   {FAQ_ITEMS.map((item) => (
                     <div key={item.question}>
                       <h3 className="text-base font-medium">{item.question}</h3>

@@ -30,11 +30,13 @@ export function ApiGenerator({ onGenerate }: ApiGeneratorProps) {
           <code className="rounded bg-muted px-1.5 py-0.5 text-xs">{API_BASE_URL}</code>
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-5">
+      <CardContent className="space-y-4">
         <div className="space-y-2">
-          <label htmlFor="home-endpoint-keyword" className="text-sm font-medium">
-            Endpoint
-          </label>
+          <div className="flex items-center gap-2">
+            <label htmlFor="home-endpoint-keyword" className="text-sm font-medium">
+              Endpoint
+            </label>
+          </div>
           <div className="flex rounded-lg border border-input bg-background transition-[border-color,box-shadow] focus-within:border-primary/50 focus-within:ring-2 focus-within:ring-primary/15">
             <span className="flex items-center border-r border-input px-3 text-sm text-muted-foreground">
               /
@@ -58,7 +60,7 @@ export function ApiGenerator({ onGenerate }: ApiGeneratorProps) {
           onRemove={api.removeQueryParam}
         />
 
-        <div className="flex flex-col gap-3 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-muted-foreground">
             Need field filtering or saved groups?{" "}
             <Link href="/playground" className="text-primary hover:underline">

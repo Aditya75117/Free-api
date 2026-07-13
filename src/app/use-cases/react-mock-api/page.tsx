@@ -5,6 +5,7 @@ import { CodeBlock } from "@/components/code-block";
 import { PageHeader } from "@/components/layout/page-header";
 import { PageSection } from "@/components/layout/page-section";
 import { Breadcrumbs } from "@/components/seo/breadcrumbs";
+import { FaqJsonLd } from "@/components/seo/faq-json-ld";
 import { PageBreadcrumbJsonLd } from "@/components/seo/page-breadcrumb-json-ld";
 import { SeoImage } from "@/components/seo/seo-image";
 import { buttonVariants } from "@/components/ui/button";
@@ -25,6 +26,7 @@ export default function ReactMockApiPage() {
   return (
     <>
       <PageBreadcrumbJsonLd items={crumbs} />
+      <FaqJsonLd faqs={REACT_USE_CASE.faqs} />
       <PageSection>
         <Breadcrumbs items={crumbs} className="mb-6" />
         <PageHeader title={REACT_USE_CASE.title} description={REACT_USE_CASE.intro} />
@@ -77,7 +79,7 @@ export default function ReactMockApiPage() {
             <h2 id="react-faq-heading" className="text-2xl font-bold tracking-tight">
               Frequently asked questions
             </h2>
-            <div className="mt-6 space-y-6">
+            <div className="mt-6 space-y-4">
               {REACT_USE_CASE.faqs.map((faq) => (
                 <div key={faq.question}>
                   <h3 className="font-medium">{faq.question}</h3>

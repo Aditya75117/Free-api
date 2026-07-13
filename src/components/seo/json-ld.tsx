@@ -1,4 +1,3 @@
-import { FAQ_ITEMS } from "@/constants/faq";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/constants/site";
 
 type JsonLdProps = {
@@ -14,6 +13,7 @@ function JsonLd({ data }: JsonLdProps) {
   );
 }
 
+/** Site-wide structured data (WebSite + SoftwareApplication). FAQPage lives on pages that render FAQs. */
 export function SiteJsonLd() {
   return (
     <>
@@ -48,20 +48,6 @@ export function SiteJsonLd() {
           },
           description: SITE_DESCRIPTION,
           url: SITE_URL,
-        }}
-      />
-      <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          mainEntity: FAQ_ITEMS.map((item) => ({
-            "@type": "Question",
-            name: item.question,
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: item.answer,
-            },
-          })),
         }}
       />
     </>

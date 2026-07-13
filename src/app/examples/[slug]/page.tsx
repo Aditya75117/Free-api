@@ -80,7 +80,7 @@ export default async function ExampleLandingPage({ params }: PageProps) {
 
       <PageSection>
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
-          <article className="space-y-6">
+          <article className="space-y-8">
             <p className="leading-relaxed text-muted-foreground">{landing.body}</p>
 
             <Card>
@@ -98,10 +98,10 @@ export default async function ExampleLandingPage({ params }: PageProps) {
             </Card>
 
             <section aria-labelledby={`${slug}-faq-heading`}>
-              <h2 id={`${slug}-faq-heading`} className="text-xl font-bold tracking-tight">
+              <h2 id={`${slug}-faq-heading`} className="text-2xl font-bold tracking-tight">
                 Frequently asked questions
               </h2>
-              <div className="mt-4 space-y-6">
+              <div className="mt-6 space-y-4">
                 {landing.faqs.map((faq) => (
                   <div key={faq.question}>
                     <h3 className="font-medium">{faq.question}</h3>
@@ -113,10 +113,10 @@ export default async function ExampleLandingPage({ params }: PageProps) {
 
             {related.length > 0 && (
               <section aria-labelledby={`${slug}-related-heading`}>
-                <h2 id={`${slug}-related-heading`} className="text-xl font-bold tracking-tight">
+                <h2 id={`${slug}-related-heading`} className="text-2xl font-bold tracking-tight">
                   Related endpoints
                 </h2>
-                <ul className="mt-3 flex flex-wrap gap-2">
+                <ul className="mt-4 flex flex-wrap gap-2">
                   {related.map((ep) => (
                     <li key={ep.keyword}>
                       <Link

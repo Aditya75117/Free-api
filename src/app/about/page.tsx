@@ -18,14 +18,14 @@ export const metadata: Metadata = buildPageMetadata(PAGE_METADATA.about);
 export default function AboutPage() {
   return (
     <div className="border-b border-border">
-      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:py-16">
+      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
         <PageHeader
           title="About ApiGenerator"
           description="A free, open-source mock REST API generator for frontend developers."
-          className="mb-10"
+          className="mb-8"
         />
 
-        <div className="grid gap-10 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-12 xl:grid-cols-[240px_minmax(0,720px)]">
+        <div className="grid gap-8 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-12 xl:grid-cols-[240px_minmax(0,720px)]">
           <aside className="lg:sticky lg:top-24 lg:self-start">
             <DocsToc items={[...ABOUT_TOC_ITEMS]} />
           </aside>
@@ -59,9 +59,9 @@ export default function AboutPage() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-3">
+                  <ul className="space-y-2">
                     {FEATURES.map((feature) => (
-                      <li key={feature.title} className="flex gap-3 text-sm">
+                      <li key={feature.title} className="flex gap-2 text-sm">
                         <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-primary" />
                         <div>
                           <span className="font-medium">{feature.title}</span>
@@ -77,16 +77,16 @@ export default function AboutPage() {
             <section id="get-started" className="scroll-mt-24">
               <Card>
                 <CardContent className="flex flex-col items-center py-10 text-center">
-                  <h2 className="text-xl font-bold tracking-tight">Ready to try it?</h2>
+                  <h2 className="text-2xl font-bold tracking-tight">Ready to try it?</h2>
                   <p className="mt-2 max-w-md text-sm text-muted-foreground">
                     Build endpoints, filter response fields, and save configs to groups — all in the
-                    playground. Compare ApiGenerator as a{" "}
-                    <Link href="/compare/jsonplaceholder" className="text-primary hover:underline">
-                      JSONPlaceholder alternative
-                    </Link>{" "}
-                    or explore{" "}
+                    playground. Or explore{" "}
                     <Link href="/use-cases/react-mock-api" className="text-primary hover:underline">
                       mock APIs in React
+                    </Link>{" "}
+                    and{" "}
+                    <Link href="/examples" className="text-primary hover:underline">
+                      example endpoints
                     </Link>
                     .
                   </p>

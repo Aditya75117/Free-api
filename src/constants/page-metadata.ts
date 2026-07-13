@@ -8,39 +8,55 @@ export type PageMeta = {
 
 export const PAGE_METADATA = {
   home: {
-    title: "Mock REST API Generator — Free Fake JSON Data",
+    title: "Free Mock REST API — Fake JSON API Generator",
     description:
-      "Generate mock REST APIs from any keyword in seconds. Free, no signup. Preview JSON, customize query params, and copy endpoints for frontend prototyping.",
+      "Free mock REST API and fake JSON API generator. Enter any keyword for realistic API placeholder data — query params, field filtering, no signup.",
     path: "/",
-    keywords: ["mock rest api generator", "fake api for testing", "json mock api", "free mock api"],
+    keywords: [
+      "free mock api",
+      "fake json api",
+      "api placeholder",
+      "free fake rest api",
+      "mock rest api generator",
+    ],
   },
   docs: {
     title: "Mock API Documentation — Params & Code Examples",
     description:
-      "Complete mock API docs: endpoints, query parameters, pagination, field filtering, and copy-paste snippets for fetch, cURL, and Axios.",
+      "Docs for our free mock API: endpoints, query parameters, pagination, field filtering, and snippets for fetch, cURL, and Axios.",
     path: "/docs",
-    keywords: ["mock api documentation", "rest api query parameters", "pagination", "field filtering"],
+    keywords: [
+      "mock api documentation",
+      "free mock api docs",
+      "rest api query parameters",
+      "fake json api examples",
+    ],
   },
   playground: {
     title: "Free API Playground — Test Mock Endpoints Online",
     description:
-      "Interactive API testing playground. Try mock REST endpoints with live params, field filtering, list/detail pairing, and saved API groups.",
+      "Interactive free API playground for fake JSON and mock REST endpoints. Live params, field filtering, list/detail pairing, and saved API groups.",
     path: "/playground",
-    keywords: ["api testing playground", "mock api tester", "try rest api online"],
+    keywords: [
+      "free api playground",
+      "mock api tester",
+      "fake json api online",
+      "try rest api online",
+    ],
   },
   examples: {
     title: "Mock API Examples — Users, Products & More",
     description:
-      "Browse 16+ mock API examples: users, products, posts, todos, recipes, and AI-powered endpoints. Try any pattern in the playground.",
+      "Browse 16+ free mock API examples: users, products, posts, todos, recipes, and AI-powered fake JSON endpoints.",
     path: "/examples",
-    keywords: ["mock api examples", "fake users api", "json placeholder alternative"],
+    keywords: ["mock api examples", "fake users api", "free mock api", "fake json api"],
   },
   about: {
     title: "About ApiGenerator — Open Source Mock API Tool",
     description:
-      "ApiGenerator is a free, open-source mock REST API generator. Prototype frontends without waiting on backend endpoints.",
+      "ApiGenerator is a free, open-source mock REST API and fake JSON API generator for frontend prototyping.",
     path: "/about",
-    keywords: ["open source mock api", "developer prototyping tool", "api generator"],
+    keywords: ["open source mock api", "free mock api", "api generator"],
   },
   groups: {
     title: "My API Groups",
@@ -48,26 +64,47 @@ export const PAGE_METADATA = {
     path: "/groups",
     noIndex: true,
   },
-  compareJsonplaceholder: {
-    title: "JSONPlaceholder Alternative — Custom Mock APIs",
+  freeApi: {
+    title: "Free API — Instant Mock REST Endpoints",
     description:
-      "Replace JSONPlaceholder with custom mock REST endpoints. Any keyword, query params, field filtering, and AI schemas — free and instant.",
-    path: "/compare/jsonplaceholder",
-    keywords: ["jsonplaceholder alternative", "mock api", "fake json api"],
+      "Use ApiGenerator as a free API for frontend prototyping. Get realistic fake JSON from any keyword — no signup, no backend.",
+    path: "/free-api",
+    keywords: ["free api", "free mock api", "free fake rest api", "free json api"],
   },
-  compareMockoon: {
-    title: "Mockoon Alternative — Cloud Mock APIs, No Install",
+  apiPlaceholder: {
+    title: "API Placeholder — Fake JSON for Prototyping",
     description:
-      "Use ApiGenerator as a zero-setup Mockoon alternative. Generate mock REST APIs in the browser — no desktop app or local server required.",
-    path: "/compare/mockoon",
-    keywords: ["mockoon alternative", "online mock api", "browser mock api"],
+      "API placeholder endpoints that return realistic fake JSON. Use any keyword as a mock REST route for UI development and testing.",
+    path: "/api-placeholder",
+    keywords: ["api placeholder", "json placeholder api", "fake api placeholder", "placeholder rest api"],
+  },
+  fakeJsonApi: {
+    title: "Fake JSON API — Realistic Mock Data Instantly",
+    description:
+      "Free fake JSON API for developers. Generate mock REST responses with query params, pagination, and field filtering — no install.",
+    path: "/fake-json-api",
+    keywords: ["fake json api", "fake rest api", "mock json api", "free fake json api"],
   },
   useCaseReact: {
     title: "Mock API for React — Fetch Fake Data in Seconds",
     description:
-      "Learn how to use mock REST APIs in React with fetch, useEffect, React Query, or SWR.",
+      "Learn how to use a free mock REST API in React with fetch, useEffect, React Query, or SWR.",
     path: "/use-cases/react-mock-api",
     keywords: ["mock api for react", "react fake api", "fetch mock data react"],
+  },
+  useCaseVue: {
+    title: "Mock API for Vue — Fetch Fake JSON in Minutes",
+    description:
+      "Wire a free fake JSON API into Vue with fetch or VueUse. Instant mock REST data for components and prototypes.",
+    path: "/use-cases/vue-mock-api",
+    keywords: ["mock api for vue", "vue fake api", "fetch mock data vue"],
+  },
+  useCaseTesting: {
+    title: "Mock API for Testing — Stable Fake JSON",
+    description:
+      "Use a free mock REST API in unit and integration tests. Seeded fake JSON for deterministic frontend and E2E flows.",
+    path: "/use-cases/testing-with-mock-api",
+    keywords: ["mock api for testing", "fake api testing", "seeded mock json"],
   },
   privacy: {
     title: "Privacy Policy",

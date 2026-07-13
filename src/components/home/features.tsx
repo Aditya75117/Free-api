@@ -29,7 +29,7 @@ export function Features() {
       title="Why ApiGenerator?"
       description="Everything you need to prototype faster and ship with confidence — a free mock REST API generator built for frontend developers."
     >
-      <div className="mb-10 grid items-center gap-8 lg:grid-cols-2">
+      <div className="mb-8 grid items-center gap-8 lg:grid-cols-2">
         <SeoImage
           src="/images/feature-generator.png"
           alt="ApiGenerator workflow: enter a keyword like user management, generate instant mock API endpoints, and receive a formatted JSON response with 200 OK status"
@@ -39,15 +39,15 @@ export function Features() {
         />
         <p className="text-muted-foreground leading-relaxed">
           Unlike fixed mock APIs, ApiGenerator lets you create endpoints from any keyword with
-          realistic JSON, query parameters, and field filtering. Compare us to{" "}
-          <Link href="/compare/jsonplaceholder" className="text-primary hover:underline">
-            JSONPlaceholder
+          realistic JSON, query parameters, and field filtering — no install, no signup. Open the{" "}
+          <Link href="/playground" className="text-primary hover:underline">
+            playground
           </Link>{" "}
-          or see how we work as a{" "}
-          <Link href="/compare/mockoon" className="text-primary hover:underline">
-            Mockoon alternative
+          or browse{" "}
+          <Link href="/examples" className="text-primary hover:underline">
+            ready-made examples
           </Link>{" "}
-          for zero-install browser prototyping.
+          to start prototyping in seconds.
         </p>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">

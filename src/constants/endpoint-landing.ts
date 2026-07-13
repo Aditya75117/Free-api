@@ -208,7 +208,7 @@ const LANDING_CONTENT: Record<string, LandingContentBase> = {
       "AI-generated dog records with breeds, ages, and descriptions. Custom mock dogs REST API powered by OpenRouter via ApiGenerator.",
     intro: "Try any custom keyword — AI generates domain-specific mock data on demand.",
     useCases: ["Custom schemas", "AI demos", "Unique test data"],
-    body: "AI-powered endpoints create tailored record shapes for keywords not in the built-in library. Generate once to discover available fields, then filter the response to match your component props. The dogs endpoint demonstrates how ApiGenerator handles niche domains that static mock APIs like JSONPlaceholder cannot cover.",
+    body: "AI-powered endpoints create tailored record shapes for keywords not in the built-in library. Generate once to discover available fields, then filter the response to match your component props. The dogs endpoint demonstrates how ApiGenerator handles niche domains beyond the built-in catalog.",
     faqs: [
       { question: "How does AI-generated mock data work?", answer: "ApiGenerator sends your keyword to OpenRouter, which returns a realistic JSON schema and sample records." },
       { question: "Are AI endpoint fields consistent?", answer: "Fields are generated per request. Use field filtering after the first call to lock in the shape for your components." },

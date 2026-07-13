@@ -35,7 +35,7 @@ export function QueryParamsDrawer({ open, onOpenChange }: QueryParamsDrawerProps
           </div>
         </SheetHeader>
 
-        <SheetBody className="space-y-3">
+        <SheetBody className="space-y-4">
           {QUERY_PARAM_DOCS.map((param) => (
             <article
               key={param.name}

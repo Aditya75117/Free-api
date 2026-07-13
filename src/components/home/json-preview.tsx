@@ -3,7 +3,6 @@
 import type { ReactNode } from "react";
 import dynamic from "next/dynamic";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
 import { Download } from "lucide-react";
 import { toast } from "sonner";
 
@@ -44,12 +43,10 @@ export function JsonPreview({
   compact = false,
 }: JsonPreviewProps) {
   const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
   const jsonString = data ? JSON.stringify(data, null, 2) : "";
-  const editorTheme = mounted && resolvedTheme === "dark" ? "vs-dark" : "vs";
+  // Monaco is loaded client-only; default to light until next-themes resolves.
+  const editorTheme = resolvedTheme === "dark" ? "vs-dark" : "vs";
   const hasData = data !== null;
-
-  useEffect(() => setMounted(true), []);
 
   function handleDownload() {
     if (!jsonString) {
@@ -71,7 +68,7 @@ export function JsonPreview({
 
   return (
     <Card>
-      <CardHeader className={compact ? "space-y-3 p-4" : "space-y-4"}>
+      <CardHeader className={compact ? "space-y-2 p-4" : "space-y-4"}>
         <CardTitle className={compact ? "text-sm" : undefined}>JSON Preview</CardTitle>
 
         <div className="rounded-lg border border-border bg-muted/40 px-3 py-2.5">
