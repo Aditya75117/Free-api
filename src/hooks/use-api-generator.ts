@@ -88,7 +88,7 @@ export function useApiGenerator(initialKeyword = "") {
       selectedFieldsRef.current,
       availableFieldsRef.current,
     );
-  }, [queryParameters, selectedFields, availableFields]);
+  }, []);
 
   const mutation = useMutation({
     mutationFn: ({ keyword: requestKeyword, params, itemId: requestItemId }: GenerateVariables) =>
@@ -120,8 +120,19 @@ export function useApiGenerator(initialKeyword = "") {
             setAiFieldsDiscovered(true);
           }
         } else {
-          setAvailableFields((prev) => mergeFieldLists(prev, keys));
-          setSelectedFields((prev) => mergeFieldLists(prev, keys));
+          const merged = mergeFieldLists(currentAvailable, keys);
+          const sameAvailable =
+            merged.length === currentAvailable.length &&
+            merged.every((field, index) => field === currentAvailable[index]);
+          if (!sameAvailable) {
+            setAvailableFields(merged);
+          }
+          setSelectedFields((prev) => {
+            const next = mergeFieldLists(prev, keys);
+            const same =
+              next.length === prev.length && next.every((field, index) => field === prev[index]);
+            return same ? prev : next;
+          });
         }
       }
 
@@ -251,22 +262,25 @@ export function useApiGenerator(initialKeyword = "") {
     return filterResponseByFields(rawResponse, selectedFields);
   }, [rawResponse, selectedFields, availableFields]);
 
+  const activeParams = useMemo(
+    () => buildEffectiveParams(queryParameters, selectedFields, availableFields),
+    [queryParameters, selectedFields, availableFields],
+  );
+
   const currentUrl = useMemo(() => {
     if (!keyword.trim()) return generatedUrl;
-    return buildApiUrl(API_BASE_URL, keyword, buildFinalParams(), itemId.trim() || undefined);
-  }, [keyword, itemId, generatedUrl, buildFinalParams, selectedFields, availableFields]);
+    return buildApiUrl(API_BASE_URL, keyword, activeParams, itemId.trim() || undefined);
+  }, [keyword, itemId, generatedUrl, activeParams]);
 
   const listUrl = useMemo(() => {
     if (!keyword.trim()) return "";
-    return buildApiUrl(API_BASE_URL, keyword, buildFinalParams());
-  }, [keyword, buildFinalParams, selectedFields, availableFields]);
+    return buildApiUrl(API_BASE_URL, keyword, activeParams);
+  }, [keyword, activeParams]);
 
   const detailUrl = useMemo(() => {
     if (!keyword.trim() || !itemId.trim()) return "";
-    return buildApiUrl(API_BASE_URL, keyword, buildFinalParams(), itemId.trim());
-  }, [keyword, itemId, buildFinalParams, selectedFields, availableFields]);
-
-  const activeParams = useMemo(() => buildFinalParams(), [buildFinalParams]);
+    return buildApiUrl(API_BASE_URL, keyword, activeParams, itemId.trim());
+  }, [keyword, itemId, activeParams]);
 
   const listItemIds = useMemo(() => extractListItemIds(rawResponse), [rawResponse]);
 
