@@ -243,7 +243,7 @@ function PlaygroundInner() {
         description="Advanced testing interface with full control over endpoints and parameters."
       />
 
-      <div className="mb-8 max-w-3xl space-y-3 text-sm leading-relaxed text-muted-foreground">
+      <div className="mb-8 max-w-3xl space-y-2 text-sm leading-relaxed text-muted-foreground">
         <p>{PLAYGROUND_INTRO.paragraph1}</p>
         <p>{PLAYGROUND_INTRO.paragraph2}</p>
       </div>
@@ -383,11 +383,13 @@ function PlaygroundInner() {
                 <code className="rounded bg-muted px-1.5 py-0.5 text-xs">{API_BASE_URL}</code>
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-5">
+            <CardContent className="space-y-4">
               <div className="space-y-2">
-                <label htmlFor="endpoint-keyword" className="text-sm font-medium">
-                  Endpoint
-                </label>
+                <div className="flex items-center gap-2">
+                  <label htmlFor="endpoint-keyword" className="text-sm font-medium">
+                    Endpoint
+                  </label>
+                </div>
                 <div className="flex rounded-lg border border-input bg-background transition-[border-color,box-shadow] focus-within:border-primary/50 focus-within:ring-2 focus-within:ring-primary/15">
                   <span className="flex items-center border-r border-input px-3 text-sm text-muted-foreground">
                     /
@@ -427,7 +429,7 @@ function PlaygroundInner() {
                 />
               )}
 
-              <div className="flex flex-col gap-3 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-col gap-3 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between">
                 <p className="hidden text-xs text-muted-foreground sm:block">
                   Configure endpoint and parameters — then generate a list.
                 </p>
@@ -532,7 +534,7 @@ function PlaygroundInner() {
                     <code className="rounded bg-muted px-1 text-xs">seed</code>).
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-5">
+                <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <label htmlFor="detail-item-id" className="text-sm font-medium">
                       Item ID
@@ -559,7 +561,7 @@ function PlaygroundInner() {
                     </div>
                   </div>
 
-                  <div className="flex justify-end border-t border-border pt-5">
+                  <div className="flex justify-end border-t border-border pt-4">
                     <Button
                       onClick={() => {
                         shouldScrollToDetailPreviewRef.current = true;

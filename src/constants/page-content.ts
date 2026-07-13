@@ -1,10 +1,10 @@
 import { API_BASE_URL } from "@/constants/api";
 
 export const HOME_HERO = {
-  badge: "Mock REST APIs for developers",
+  badge: "Free mock API & fake JSON for developers",
   title: "Generate mock REST APIs in seconds",
   subtitle:
-    "ApiGenerator is a free mock REST API generator — enter any keyword, get realistic JSON instantly. A flexible JSONPlaceholder alternative with query parameters, field filtering, and AI-powered custom schemas. No backend, no signup.",
+    "ApiGenerator is a free mock REST API and fake JSON API generator — enter any keyword, get realistic API placeholder data instantly. Query parameters, field filtering, and AI-powered custom schemas included. No backend, no signup.",
   ctaPrimary: "Try it now",
   ctaSecondary: "Open Playground",
 } as const;
@@ -29,7 +29,7 @@ export const PLAYGROUND_INTRO = {
 export const ABOUT_CONTENT = {
   motivation: `Building frontend applications often means waiting on backend endpoints or configuring complex mock servers. ApiGenerator removes that friction — enter a keyword like users, products, or recipes, and receive realistic JSON over HTTP within milliseconds.
 
-The project is open source and built for developers who need fast, reliable test data during prototyping, automated testing, tutorials, and hackathons. Whether you are comparing ApiGenerator to JSONPlaceholder or evaluating it as a Mockoon alternative, the goal is the same: ship UI faster without blocking on backend work.`,
+The project is open source and built for developers who need fast, reliable test data during prototyping, automated testing, tutorials, and hackathons. The goal is simple: ship UI faster without blocking on backend work.`,
   openSource:
     "ApiGenerator is free to use with no account required. The frontend is a Next.js application and the backend is an Express API — both designed to be simple, fast, and developer-friendly.",
 } as const;
@@ -88,71 +88,6 @@ export const TERMS_CONTENT = {
   ],
 } as const;
 
-export const JSONPLACEHOLDER_COMPARE = {
-  title: "JSONPlaceholder Alternative — Custom Mock REST APIs",
-  intro: `JSONPlaceholder is the go-to fake REST API for quick tutorials — but it only offers fixed routes with static data. ApiGenerator is a modern JSONPlaceholder alternative that lets you create endpoints from any keyword, customize responses with query parameters, filter fields, and use AI for custom data shapes — all free and instant in your browser.`,
-  migrationTitle: "Migrate from JSONPlaceholder in one line",
-  migrationCode: `// Before (JSONPlaceholder)\nconst res = await fetch("https://jsonplaceholder.typicode.com/users");\n\n// After (ApiGenerator)\nconst res = await fetch("${API_BASE_URL}/users?count=10");`,
-  faqs: [
-    {
-      question: "Is ApiGenerator a good JSONPlaceholder alternative?",
-      answer:
-        "Yes. ApiGenerator offers the same instant HTTP JSON experience but adds custom keywords, query parameters, field filtering, list/detail chaining, and AI-generated schemas for any English word.",
-    },
-    {
-      question: "Do I need to change my frontend code much?",
-      answer:
-        "Usually just the base URL. ApiGenerator returns JSON arrays in a data field with pagination metadata, similar to what most frontends expect.",
-    },
-    {
-      question: "Is ApiGenerator free like JSONPlaceholder?",
-      answer:
-        "Yes. ApiGenerator is completely free with no signup, no API keys, and no rate-limited account tiers for built-in endpoints.",
-    },
-  ],
-  features: [
-    { feature: "Custom keyword endpoints", jsonplaceholder: false, apigenerator: true },
-    { feature: "Query parameters (count, page, sort)", jsonplaceholder: false, apigenerator: true },
-    { feature: "Field filtering", jsonplaceholder: false, apigenerator: true },
-    { feature: "AI custom schemas", jsonplaceholder: false, apigenerator: true },
-    { feature: "Browser playground", jsonplaceholder: false, apigenerator: true },
-    { feature: "Fixed routes (users, posts)", jsonplaceholder: true, apigenerator: true },
-    { feature: "No signup required", jsonplaceholder: true, apigenerator: true },
-    { feature: "Free to use", jsonplaceholder: true, apigenerator: true },
-  ],
-} as const;
-
-export const MOCKOON_COMPARE = {
-  title: "Mockoon Alternative — Cloud Mock APIs, No Install",
-  intro: `Mockoon is a powerful desktop application for designing complex mock APIs with rules, templating, and local environments. ApiGenerator is a zero-install Mockoon alternative for developers who need instant mock REST endpoints in the browser — no desktop app, no configuration files, no local server setup.`,
-  faqs: [
-    {
-      question: "When should I use ApiGenerator instead of Mockoon?",
-      answer:
-        "Use ApiGenerator when you need quick fake JSON for frontend prototyping and do not want to install or configure a desktop mock server. Use Mockoon when you need advanced rules, offline environments, or CI/CD mock deployments.",
-    },
-    {
-      question: "Does ApiGenerator work offline?",
-      answer:
-        "ApiGenerator requires an internet connection to reach the API backend. Mockoon runs fully offline on your machine.",
-    },
-    {
-      question: "Can ApiGenerator replace Mockoon for team collaboration?",
-      answer:
-        "ApiGenerator focuses on instant individual prototyping. For team mock sharing and cloud deployments, Mockoon Cloud is the better fit.",
-    },
-  ],
-  features: [
-    { feature: "Zero install — browser only", mockoon: false, apigenerator: true },
-    { feature: "Any keyword as endpoint", mockoon: true, apigenerator: true },
-    { feature: "Desktop GUI for complex rules", mockoon: true, apigenerator: false },
-    { feature: "Query params & pagination", mockoon: true, apigenerator: true },
-    { feature: "AI-generated custom data", mockoon: true, apigenerator: true },
-    { feature: "Offline / local server", mockoon: true, apigenerator: false },
-    { feature: "Free & open source", mockoon: true, apigenerator: true },
-  ],
-} as const;
-
 export const REACT_USE_CASE = {
   title: "Mock API for React — Fetch Fake Data in Seconds",
   intro: `Frontend React developers often need fake API data before the backend is ready. ApiGenerator gives you instant mock REST endpoints — just fetch JSON from any keyword URL and wire it into your components with useEffect, React Query, or SWR.`,
@@ -204,6 +139,88 @@ function useMockUsers() {
       question: "Does mock data stay consistent between requests?",
       answer:
         "Use the seed query parameter to get deterministic data across list and detail requests, which is useful for testing navigation flows.",
+    },
+  ],
+} as const;
+
+export const VUE_USE_CASE = {
+  title: "Mock API for Vue — Fetch Fake JSON in Minutes",
+  intro: `Vue developers often need fake API data before the backend is ready. ApiGenerator gives you instant mock REST endpoints — fetch JSON from any keyword URL and wire it into setup(), composables, or VueUse.`,
+  fetchExample: `import { onMounted, ref } from "vue";
+
+const API_URL = "${API_BASE_URL}/products?count=12";
+
+export function useProducts() {
+  const products = ref([]);
+
+  onMounted(async () => {
+    const res = await fetch(API_URL);
+    const json = await res.json();
+    products.value = json.data ?? [];
+  });
+
+  return { products };
+}`,
+  composableExample: `import { useFetch } from "@vueuse/core";
+
+export function useMockUsers() {
+  return useFetch("${API_BASE_URL}/users?count=10&fields=id,firstName,email").json();
+}`,
+  faqs: [
+    {
+      question: "How do I use a mock API in Vue 3?",
+      answer:
+        "Fetch ApiGenerator endpoints inside onMounted or a composable. Responses return JSON with a data array you can assign to refs.",
+    },
+    {
+      question: "Does this work with Nuxt?",
+      answer:
+        "Yes. Call the same REST URLs from useFetch, $fetch, or server routes during prototyping.",
+    },
+    {
+      question: "Can I keep list and detail data in sync?",
+      answer:
+        "Pass the same seed query parameter on list and detail requests so IDs and fields stay stable while you build navigation.",
+    },
+  ],
+} as const;
+
+export const TESTING_USE_CASE = {
+  title: "Mock API for Testing — Stable Fake JSON",
+  intro: `Automated tests need predictable HTTP JSON without flaky fixtures. ApiGenerator is a free mock REST API you can hit from unit, integration, and E2E suites — use seed for deterministic fake data across runs.`,
+  fetchExample: `// Vitest / Jest style helper
+export async function fetchMockUsers(seed = "tests") {
+  const res = await fetch("${API_BASE_URL}/users?count=5&seed=" + seed);
+  const json = await res.json();
+  return json.data;
+}
+
+test("loads users from mock API", async () => {
+  const users = await fetchMockUsers();
+  expect(users).toHaveLength(5);
+  expect(users[0]).toHaveProperty("email");
+});`,
+  e2eExample: `// Playwright example
+await page.route("**/users*", async (route) => {
+  const res = await fetch("${API_BASE_URL}/users?count=3&seed=e2e");
+  const body = await res.text();
+  await route.fulfill({ status: 200, contentType: "application/json", body });
+});`,
+  faqs: [
+    {
+      question: "Why use a live mock API in tests?",
+      answer:
+        "It exercises real HTTP parsing and loading states without maintaining large fixture files. Seed keeps payloads stable between runs.",
+    },
+    {
+      question: "Should E2E tests call the public API directly?",
+      answer:
+        "You can, or proxy through page.route / MSW. Either way, ApiGenerator provides consistent fake JSON shapes for UI assertions.",
+    },
+    {
+      question: "Is mock data safe for CI?",
+      answer:
+        "Yes for prototyping tests. Do not send secrets or PII to the mock API, and prefer seeded built-in endpoints for speed.",
     },
   ],
 } as const;

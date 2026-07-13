@@ -35,12 +35,12 @@ export function Hero() {
             </Link>
           </div>
           <p className="mt-6 text-sm text-muted-foreground">
-            Looking for a{" "}
-            <Link href="/compare/jsonplaceholder" className="text-primary hover:underline">
-              JSONPlaceholder alternative
+            Custom keywords, query params, field filtering, and AI schemas — all in one free mock
+            API, ready for{" "}
+            <Link href="/playground" className="text-primary hover:underline">
+              the playground
             </Link>
-            ? ApiGenerator adds custom keywords, query params, and AI schemas on top of instant
-            fake JSON.
+            .
           </p>
         </div>
         <div className="hidden sm:block">

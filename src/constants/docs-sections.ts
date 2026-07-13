@@ -6,6 +6,6 @@ export const DOC_TOC_ITEMS = [
   { id: "query-parameters", label: "Query Parameters" },
   { id: "response-fields", label: "Response Fields" },
   { id: "code-snippets", label: "Code Snippets" },
-  { id: "comparison", label: "Comparison" },
+  // { id: "comparison", label: "Comparison" },
   { id: "faq", label: "FAQ" },
 ] as const;

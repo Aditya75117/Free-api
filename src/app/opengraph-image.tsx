@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "ApiGenerator — Mock REST API Generator";
+export const alt = "ApiGenerator — Free Mock REST API and Fake JSON";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -49,7 +49,7 @@ export default function OpenGraphImage() {
           </div>
         </div>
         <p style={{ fontSize: 32, color: "#94a3b8", margin: 0, maxWidth: 800, lineHeight: 1.4 }}>
-          Generate mock REST APIs instantly. Preview JSON, customize parameters, and ship faster.
+          Free mock REST API and fake JSON generator. Any keyword, instant placeholder data.
         </p>
         <div
           style={{

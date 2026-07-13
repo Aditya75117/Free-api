@@ -2,7 +2,12 @@ export const FAQ_ITEMS = [
   {
     question: "What is a mock API?",
     answer:
-      "A mock API returns fake but realistic JSON data over HTTP, so you can build and test frontends without a real backend. ApiGenerator creates mock REST endpoints from any keyword instantly.",
+      "A mock API (also called a fake JSON API or API placeholder) returns realistic JSON over HTTP so you can build and test frontends without a real backend. ApiGenerator creates free mock REST endpoints from any keyword instantly.",
+  },
+  {
+    question: "Is ApiGenerator a free API?",
+    answer:
+      "Yes. ApiGenerator is a free mock API with no signup. Use it as a free fake REST API for prototypes, tutorials, and tests — including query parameters and field filtering on built-in endpoints.",
   },
   {
     question: "How do I use query parameters?",
@@ -10,14 +15,9 @@ export const FAQ_ITEMS = [
       "Append query parameters to any endpoint URL — for example, ?count=10&page=1&limit=5 controls how many records are returned and paginates results. See the documentation for the full list.",
   },
   {
-    question: "Is ApiGenerator free to use?",
+    question: "What can I customize on each endpoint?",
     answer:
-      "Yes. ApiGenerator is free and open source. Enter any keyword, generate JSON responses, and use them in prototypes, tests, and tutorials with no signup required.",
-  },
-  {
-    question: "How is ApiGenerator different from JSONPlaceholder?",
-    answer:
-      "JSONPlaceholder offers fixed endpoints with static data. ApiGenerator lets you create endpoints from any keyword, customize responses with query parameters, filter fields, and use AI for custom data shapes.",
+      "Use query parameters for count, pagination, sorting, and field filtering. For custom domains, AI-powered endpoints generate tailored JSON schemas from any English keyword.",
   },
   {
     question: "Can I save endpoint configurations?",

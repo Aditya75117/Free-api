@@ -171,7 +171,7 @@ export function ParameterForm({
 
   return (
     <>
-      <div className="space-y-3">
+      <div className="space-y-2">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-1.5">
             <h3 className="text-sm font-medium">Query Parameters</h3>

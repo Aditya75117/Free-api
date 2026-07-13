@@ -6,21 +6,14 @@ type PageShellProps = {
   children: ReactNode;
   width?: "default" | "narrow";
   className?: string;
-  padding?: "default" | "marketing";
 };
 
-export function PageShell({
-  children,
-  width = "default",
-  className,
-  padding = "default",
-}: PageShellProps) {
+export function PageShell({ children, width = "default", className }: PageShellProps) {
   return (
     <div
       className={cn(
-        "mx-auto px-4 sm:px-6",
+        "mx-auto px-4 py-16 sm:px-6",
         width === "narrow" ? "max-w-4xl" : "max-w-6xl",
-        padding === "marketing" ? "py-16" : "py-12",
         className,
       )}
     >

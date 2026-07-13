@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
 
-import { SITE_NAME, SITE_URL } from "@/constants/site";
+import { SITE_NAME } from "@/constants/site";
+
+export const DEFAULT_OG_IMAGE = {
+  url: "/og.png",
+  width: 1200,
+  height: 630,
+  alt: "ApiGenerator — Free Mock REST API and Fake JSON",
+} as const;
 
 type PageMetadataOptions = {
   title: string;
@@ -17,8 +24,6 @@ export function buildPageMetadata({
   keywords,
   noIndex = false,
 }: PageMetadataOptions): Metadata {
-  const url = path === "/" ? SITE_URL : `${SITE_URL}${path}`;
-
   return {
     title,
     description,
@@ -31,11 +36,13 @@ export function buildPageMetadata({
       siteName: SITE_NAME,
       type: "website",
       locale: "en_US",
+      images: [DEFAULT_OG_IMAGE],
     },
     twitter: {
       card: "summary_large_image",
       title: `${title} | ${SITE_NAME}`,
       description,
+      images: [DEFAULT_OG_IMAGE.url],
     },
     robots: noIndex ? { index: false, follow: true } : { index: true, follow: true },
   };

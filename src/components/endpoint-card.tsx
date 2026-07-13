@@ -101,7 +101,7 @@ export function EndpointCard({
             <code className="text-xs text-muted-foreground">/{keyword}</code>
           </div>
         </div>
-        <CardDescription className="mt-3 flex-1">{description}</CardDescription>
+        <CardDescription className="mt-2 flex-1">{description}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-wrap gap-2 pt-0">
         {exampleHref && (

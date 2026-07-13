@@ -18,7 +18,7 @@ export default function TermsPage() {
       <article className="prose prose-neutral dark:prose-invert max-w-none space-y-8">
         {TERMS_CONTENT.sections.map((section) => (
           <section key={section.heading}>
-            <h2 className="text-xl font-bold tracking-tight">{section.heading}</h2>
+            <h2 className="text-2xl font-bold tracking-tight">{section.heading}</h2>
             <p className="mt-2 text-muted-foreground leading-relaxed">{section.body}</p>
           </section>
         ))}

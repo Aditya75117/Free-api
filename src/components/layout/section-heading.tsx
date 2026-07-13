@@ -19,10 +19,10 @@ export function SectionHeading({
     <Tag
       id={id}
       className={cn(
-        "font-heading font-medium tracking-tight",
-        Tag === "h2" && "text-2xl",
-        Tag === "h3" && "text-base",
-        Tag === "h4" && "text-sm",
+        "tracking-tight",
+        Tag === "h2" && "text-2xl font-bold",
+        Tag === "h3" && "font-heading text-base font-medium",
+        Tag === "h4" && "font-heading text-sm font-medium",
         className,
       )}
     >

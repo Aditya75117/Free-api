@@ -13,6 +13,7 @@ import {
   SITE_URL,
 } from "@/constants/site";
 import { PAGE_METADATA } from "@/constants/page-metadata";
+import { DEFAULT_OG_IMAGE } from "@/lib/metadata";
 
 import "./globals.css";
 
@@ -39,14 +40,16 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: SITE_NAME,
-    title: `${SITE_NAME} — Mock REST API Generator`,
+    title: `${SITE_NAME} — Free Mock REST API`,
     description: SITE_DESCRIPTION,
     url: "/",
+    images: [DEFAULT_OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE_NAME} — Mock REST API Generator`,
+    title: `${SITE_NAME} — Free Mock REST API`,
     description: SITE_DESCRIPTION,
+    images: [DEFAULT_OG_IMAGE.url],
   },
   robots: { index: true, follow: true },
 };
