@@ -66,7 +66,8 @@ export const EndpointTester = forwardRef<EndpointTesterHandle, EndpointTesterPro
       if (configLoaded.current) return;
       configLoaded.current = true;
       api.loadConfig(keyword, initialParams, itemId);
-    }, [keyword, initialParams, itemId, api]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [keyword, initialParams, itemId]);
 
     useEffect(() => {
       if (!expanded || !autoFetch || didAutoFetch.current) return;
@@ -77,7 +78,8 @@ export const EndpointTester = forwardRef<EndpointTesterHandle, EndpointTesterPro
       } else {
         void api.generateAsync();
       }
-    }, [expanded, autoFetch, api, api.keyword, keyword, itemId]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [expanded, autoFetch, api.keyword, keyword, itemId]);
 
     useImperativeHandle(
       ref,

@@ -48,8 +48,13 @@ function parsePlaygroundSearchParams(searchParams: URLSearchParams): {
 
 function PlaygroundInner() {
   const searchParams = useSearchParams();
-  const { keyword: initialKeyword, params: initialParams, itemId: initialItemId } =
-    parsePlaygroundSearchParams(searchParams);
+  const searchKey = searchParams.toString();
+  const { keyword: initialKeyword, params: initialParams, itemId: initialItemId } = useMemo(
+    () => parsePlaygroundSearchParams(searchParams),
+    // searchKey captures URL changes; searchParams identity is unstable
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [searchKey],
+  );
   const listApi = useApiGenerator(initialKeyword);
   const detailApi = useApiGenerator();
   const groupsApi = useApiGroups();
@@ -88,17 +93,18 @@ function PlaygroundInner() {
         detailApi.loadConfig(initialKeyword, initialParams, initialItemId);
       }
     }
+    // Only react to URL-derived config; loadConfig identities are stable enough via the hook.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialKeyword, searchParams.toString()]);
+  }, [initialKeyword, initialItemId, initialParams]);
 
   useEffect(() => {
-    if (listApi.loading) {
-      detailApi.reset();
-      pairedGroupRef.current = false;
-      prevListResponseRef.current = null;
-      setGroupCreatedMessage(null);
-    }
-  }, [listApi.loading, detailApi]);
+    if (!listApi.loading) return;
+    detailApi.reset();
+    pairedGroupRef.current = false;
+    prevListResponseRef.current = null;
+    // Depend on loading only — including detailApi (new object each render) caused an infinite loop.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listApi.loading]);
 
   useEffect(() => {
     if (
@@ -113,13 +119,13 @@ function PlaygroundInner() {
       detailApi.syncFromList(listApi.keyword, listApi.activeParams);
       shouldScrollToListPreviewRef.current = true;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     listApi.hasResponse,
     listApi.response,
     listApi.keyword,
     listApi.activeParams,
     listItemIds.length,
-    detailApi,
   ]);
 
   useEffect(() => {
@@ -442,6 +448,7 @@ function PlaygroundInner() {
                   )}
                   <Button
                     onClick={() => {
+                      setGroupCreatedMessage(null);
                       shouldScrollToListPreviewRef.current = true;
                       listApi.generateList();
                     }}
